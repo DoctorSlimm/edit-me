@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import ChatWoot from "./components/ChatWoot";
+import ThemeToggle from "./components/ThemeToggle";
 
 export default function Home() {
   const [snowflakes, setSnowflakes] = useState<Array<{ id: number; left: number; delay: number; duration: number }>>([]);
@@ -186,6 +187,9 @@ export default function Home() {
           animation: marquee 20s linear infinite;
         }
       `}</style>
+
+      {/* Theme Toggle */}
+      <ThemeToggle />
 
       {/* ChatWoot Component */}
       <ChatWoot />
