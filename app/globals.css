@@ -3,6 +3,12 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  /* Green Design Tokens for UI Enhancement */
+  --green-primary: #22c55e;
+  --green-secondary: #16a34a;
+  --green-accent: #4ade80;
+  --green-dark: #15803d;
+  --green-light: #dcfce7;
 }
 
 @theme inline {

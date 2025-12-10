@@ -35,6 +35,16 @@ export default function Home() {
 
       {/* Main Content */}
       <main className="relative z-10 flex flex-col items-center justify-center min-h-screen p-8">
+        {/* GREEN FEATURE BANNER - NEW */}
+        <div className="mb-8 w-full max-w-2xl">
+          <div className="bg-gradient-to-r from-green-500 via-green-400 to-green-500 border-4 border-green-700 p-6 rounded-lg shadow-2xl animate-pulse">
+            <div className="text-center">
+              <p className="text-4xl font-bold text-white mb-2">✨ GREEN INITIATIVE ✨</p>
+              <p className="text-lg text-green-50 font-semibold">Celebrating Environmental Excellence & Holiday Cheer</p>
+            </div>
+          </div>
+        </div>
+
         {/* Blinking Header */}
         <div className="mb-8 text-center">
           <h1 className="text-6xl font-bold text-yellow-300 animate-pulse mb-4" style={{ textShadow: '3px 3px 0px #ff0000, 6px 6px 0px #00ff00' }}>
@@ -68,6 +78,20 @@ export default function Home() {
           </div>
         </div>
 
+        {/* GREEN FEATURE BOX - ENHANCED */}
+        <div className="bg-green-600 border-4 border-green-700 p-6 max-w-2xl w-full mb-8 shadow-lg">
+          <h2 className="text-3xl text-white text-center mb-4 font-bold underline">
+            🌿 GREEN STATUS INDICATOR 🌿
+          </h2>
+          <div className="bg-green-700 border-2 border-green-400 p-4 rounded text-center">
+            <div className="flex justify-center mb-3">
+              <div className="w-6 h-6 bg-green-400 rounded-full animate-pulse"></div>
+            </div>
+            <p className="text-white font-bold text-lg">✓ System Operating at Peak Green Efficiency</p>
+            <p className="text-green-100 text-sm mt-2">Eco-Friendly Mode: ENABLED</p>
+          </div>
+        </div>
+
         {/* Retro Links Section */}
         <div className="bg-red-800 border-4 border-double border-yellow-300 p-6 max-w-2xl w-full mb-8">
           <h2 className="text-3xl text-yellow-300 text-center mb-4 underline">
@@ -86,6 +110,18 @@ export default function Home() {
             <a href="#" className="block bg-green-700 border-2 border-yellow-300 p-3 text-yellow-300 hover:bg-green-600 transition-colors">
               <span className="text-xl">🎁</span> Sign My Guestbook!
             </a>
+          </div>
+        </div>
+
+        {/* GREEN ACCENT HIGHLIGHT - NEW */}
+        <div className="w-full max-w-2xl mb-8">
+          <div className="bg-gradient-to-r from-green-500 to-green-600 border-4 border-green-700 p-4 rounded-lg">
+            <p className="text-white text-center font-bold text-lg">
+              🟢 Green Technology Powers This Experience 🟢
+            </p>
+            <p className="text-green-50 text-center text-sm mt-2">
+              Built with sustainable practices and eco-conscious design
+            </p>
           </div>
         </div>
 
