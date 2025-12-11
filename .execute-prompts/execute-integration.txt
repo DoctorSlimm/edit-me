@@ -4,11 +4,11 @@ You are implementing an integration plan for a project.
 
 # Integration Plan
 
-{"answers":[{"answer":"A real-time collaboration tool (like shared document editing or live commenting)","question":"What is the primary system or feature you're building, and what core problem does it solve for your users?"},{"answer":"PostgreSQL (relational, strong for structured data and transactions)","question":"For data persistence, what database technology do you currently use or prefer?"},{"answer":"Small scale: 100-1,000 active users initially, modest growth","question":"What is your expected user scale and growth rate?"}]}
+{"answers":[{"answer":"A user-facing UI counter (e.g., likes, cart items, page visits)","question":"
 
 ## Implementation Plan
 
-{"answers":[{"answer":"A real-time collaboration tool (like shared document editing or live commenting)","question":"What is the primary system or feature you're building, and what core problem does it solve for your users?"},{"answer":"PostgreSQL (relational, strong for structured data and transactions)","question":"For data persistence, what database technology do you currently use or prefer?"},{"answer":"Small scale: 100-1,000 active users initially, modest growth","question":"What is your expected user scale and growth rate?"}]}
+{"answers":[{"answer":"A user-facing UI counter (e.g., likes, cart items, page visits)","question":"What is the primary use case for this counter? Is it for user interactions, system metrics, inventory tracking, real-time data, or something else?"},{"answer":"Low scale (< 100 updates per second, single server sufficient)","question":"What are your scale expectations for concurrent counter updates?"},{"answer":"In-memory only (resets on restart, fastest performance)","question":"Should counter st
 
 ## Your Task
 
