@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #FF0000;
+  --foreground: #ffffff;
   /* Green Design Tokens for UI Enhancement */
   --green-primary: #22c55e;
   --green-secondary: #16a34a;
@@ -20,8 +20,8 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #FF0000;
+    --foreground: #ffffff;
   }
 }
 
