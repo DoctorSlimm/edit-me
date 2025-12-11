@@ -2,80 +2,90 @@ You are implementing an integration plan for a project.
 
 ## Integration Plan
 
-# Web-based Music Streaming Service
+# Comic Sans Global Font Implementation
 
-A browser-based music streaming service integrating third-party APIs for anonymous public playback, targeting less than 10,000 monthly active users without user authentication or personalized features.
+This plan outlines the implementation of Comic Sans as the primary font across an application, detailing the steps for applying it globally, ensuring accessibility, and maintaining performance standards.
 
 ## Implementation Plan
 
-# Executive Summary
+# Overview and Objectives
 
-Build a web-based music streaming feature for anonymous users using third-party API integrations (Spotify, Apple Music, YouTube Music). Target: <10k monthly active users. Include playback controls (play, pause, skip, volume) and catalog search. No user authentication, playlists, or history tracking required.
+Apply Comic Sans globally as the primary font across all UI elements via the root CSS stylesheet (`/app/globals.css`). This includes code blocks, tables, form inputs, and all technical content.
 
-Integrate lightweight frontend components with existing music APIs. Use third-party providers for music data and streaming infrastructure. Defer complex features (recommendations, playlists, user accounts) to future phases.
+Use font stack: Comic Sans, cursive, sans-serif for accessibility fallbacks. All elements inherit this setting with no component-level exceptions.
 
-# Requirements and Scope
+Success criteria: Comic Sans renders consistently across all elements with proper system fallback support.
 
-## Functional Requirements
+# Requirements and Constraints
 
-Web-based music streaming service using third-party APIs (Spotify Web API, Apple Music, YouTube Music API). Public, anonymous access only—no authentication or accounts. Playback controls: play, pause, skip, volume. Display track metadata: title, artist, album, duration.
+**Functional Requirements:** Apply Comic Sans as primary font in `:root` CSS with fallbacks (Comic Sans, cursive, sans-serif). Affects all elements: headings, body, form inputs, code blocks, tables. Existing font variables remain available for component-specific overrides but do not override root declaration.
 
-## Non-Functional Requirements
+**Non-Functional Requirements:** Comic Sans must not degrade performance or page load time compared to current Geist font stack. Must meet WCAG contrast standards on white (#ffffff) and dark (#0a0a0a) backgrounds. Font scaling and zoom must remain functional. Traditional CSS file structure with global stylesheet and component-scoped CSS.
 
-Browser-based (desktop and mobile web). Target: <10k monthly active users. Search results load under 3 seconds. Handle concurrent playback without degradation. Graceful fallback when third-party APIs unavailable.
+**Backward Compatibility:** Existing component styles, CSS classes, and custom font overrides (ChiKareGo) remain unchanged. Forms render with Comic Sans through root cascade.
 
-## Out of Scope
+# Technical Architecture
 
-Authentication, accounts, playlists, favorites, playback history, offline playback, file uploads, recommendations, personalization, social features, ad serving, subscription management.
+## CSS Strategy
 
-# System Architecture
+Comic Sans is set in the global stylesheet (globals.css) at the root level with fallback stack: Comic Sans, cursive, sans-serif. The font-family rule on the body element applies universally across all components, code blocks, tables, form inputs, and technical content through CSS inheritance. No component-level overrides are required.
 
-Three modules integrate music streaming: API Integration Layer (Spotify Web API, Apple Music, YouTube Music API), Playback Engine (browser audio streaming and controls), Catalog Management (search and filtering).
+## Implementation
 
-Server-side proxies relay API requests. The browser retrieves track metadata (title, artist, album, duration) on-demand and streams audio directly from music services. Anonymous playback; no authentication required. Web-based, designed for <10k monthly active users.
+Modify font-family in globals.css body selector. This leverages existing CSS cascade behavior to apply Comic Sans application-wide without refactoring components, middleware, or custom font loading mechanisms.
 
-# Data Structures and APIs
+# Implementation Strategy
 
-Third-party APIs (Spotify Web API, Apple Music API, YouTube Music API) provide music metadata and streaming. JSON responses include track title, artist, album, duration, and stream URL. Error responses include HTTP status code and message string. No authentication headers required; API keys stored server-side.
+## CSS Update
 
-Client-side state holds current search results and playback metadata only. No database schemas, persistence layer, or user sessions. Backend fetches track data by ID or search term from the appropriate service and streams audio to browser. Search latency target: <500ms; stream initialization: <1s.
+Modify `/app/globals.css`: Update `--font-sans` variable to `'Comic Sans MS', cursive, sans-serif` and change the `body` font-family rule from `Arial, Helvetica, sans-serif` to `'Comic Sans MS', cursive, sans-serif`. Remove Geist font imports from `/app/layout.tsx` (lines 2, 7-15). Comic Sans is system-available; no CDN or external delivery required.
 
-# Implementation Details
+## Affected Components
 
-**Library and Framework Selection**
+All elements inherit from `:root` and `body` via Tailwind cascade. Components in `/app/page.tsx` (header, links, marquee text, counter) and `/app/components/ChatWoot.tsx` (form inputs, buttons, labels) automatically apply the font. Code blocks and technical content use the same global font stack.
 
-Integrate Spotify Web API as primary catalog and playback control source. Initialize Spotify Web Playback SDK on page load with OAuth token from backend. Store API credentials in server-side environment variables only.
+## Testing & Deployment
 
-**Playback and Integration**
+Run `npm run dev` to verify Comic Sans renders across the page, form inputs, and animations (snowflakes, marquee). Run `next build` to confirm compilation. No visual regression expected; fallback fonts activate if Comic Sans unavailable on user systems.
 
-Implement play, pause, seek, and volume controls via SDK methods. Route music requests through a single API endpoint that forwards to Spotify, Apple Music, or YouTube Music APIs. Store no persistent user state—browser memory only. Implement error handling for API unavailability.
+# Data Structures and Interfaces
 
-# Edge Cases and Error Handling
+Comic Sans replaces all font declarations globally via single CSS modification in `globals.css` body element. Font stack: `Comic Sans, cursive, sans-serif`. Current `body` declaration uses `font-family: Arial, Helvetica, sans-serif` (line 25); change to Comic Sans. All elements—code blocks, form inputs, tables, technical content—inherit automatically.
 
-Third-party APIs (Spotify, Apple Music, YouTube Music) fail intermittently. Implement exponential backoff with max 3 retries on 429 and 5xx errors; timeout requests at 10 seconds and return cached data if available. Dropped streaming connections pause playback with user notification; do not auto-resume. Display "Service temporarily unavailable" if quota exhausted; queue retry after 60 seconds.
+No API changes. No data structure modifications. No TypeScript interface updates required. Layout.tsx font imports (`Geist`, `Geist_Mono`, `fontChiKaReGo`) remain unchanged; font-family declaration alone overrides all typography via CSS cascade. CSS variables in globals.css (lines 8-13) reference `--font-geist-sans` and `--font-geist-mono`; reassign to Comic Sans if needed or leave unchanged since body declaration takes precedence.
 
-Tracks may lack duration, artist, or cover art. Use fallbacks: unknown duration = 0:00, missing artist = "Unknown Artist", missing artwork = gray placeholder. YouTube Music and Spotify return different codecs (mp4a, opus, aac); detect browser support before streaming or notify "Format not supported." Never block playback with incomplete metadata.
+Implementation requires single edit: change `font-family: Arial, Helvetica, sans-serif` to `font-family: Comic Sans, cursive, sans-serif` in body selector (globals.css line 25).
 
-At <10k MAU, cap concurrent streams to 3 per session; queue additional requests. Monitor memory and pause oldest unused stream if memory > 80%. For persistent service degradation, cache last-known catalog for 24 hours and label as "cached data." Public/anonymous access requires no user-specific recovery paths.
+# Component Interactions and System Integration
 
-# Testing and Validation
+Comic Sans applies globally via the `:root` CSS variable in `globals.css` with fallback pattern `Comic Sans, cursive, sans-serif`. This cascades to all DOM elements including form inputs, code blocks, and tables. The global rule overrides Tailwind utility classes (`font-mono`, `font-bold`) and existing inline style attributes (`fontFamily: "monospace"`, `--font-chikarego`).
 
-## Integration and Playback Tests
-Test Spotify, Apple Music, and YouTube Music API endpoints for valid track data and streaming URLs. Test play, pause, stop, and seek controls in Chrome, Firefox, and Safari. Validate error handling for API 4xx/5xx responses and network timeouts. Test catalog search and track metadata retrieval using mock API responses.
+Component styling is processed at build time through PostCSS variable resolution in `globals.css`, Next.js font loading chain (`--font-geist-sans`, `--font-geist-mono`, `--font-chikarego` CSS variables), and Tailwind CSS v4 theme imports. The Home page `font-mono` utility class, ChatWoot inline `fontFamily: "monospace"` on buttons and containers, and textarea/input `--font-chikarego` CSS variables are all replaced by the global Comic Sans rule in the cascade.
 
-## Performance Targets
-Single-user latency: ≤2 seconds from search to audio playback. Browser memory usage: <150MB per concurrent anonymous session. Third-party API response times: <500ms for search and track fetches. Continuous playback without buffering interruption for 10-minute tracks.
+Third-party script content (`react-grab` loaded via `<Script>`) and all heading elements inherit Comic Sans through system font inheritance. No CSS-in-JS runtime modifications needed; stylesheet processing applies changes at build time.
 
-## Acceptance Criteria
-Search results display within 3 seconds. Playback starts within 2 seconds of selection. Seek, volume, and queue controls respond immediately without authentication. Graceful degradation when any third-party API is unavailable—show cached results or disable affected source only.
+# Testing, Validation, and Measurement
 
-# Performance and Constraints
+## Visual Regression Testing
 
-API calls to third-party services (Spotify, Apple Music, YouTube Music) must return within 2-3 seconds. Playback buffering must complete within 500ms. Browser playback controls require sub-100ms response times.
+Compare screenshots before and after Comic Sans implementation in globals.css. Verify font applies consistently to all elements: code blocks, tables, form inputs, and technical content.
 
-Target: <10k monthly active users with peak concurrent sessions at 100-200 users. No database storage required for anonymous playback.
+## Cross-Browser Validation
 
-Web-only browser implementation. Standard broadband speeds (5+ Mbps) assumed for playback. Browser memory usage capped at 50MB per session.
+Test rendering across Chrome, Firefox, Safari, and Edge. Verify font stack `Comic Sans, cursive, sans-serif` activates fallbacks when Comic Sans unavailable. Confirm consistent rendering on iOS Safari and Chrome Android.
+
+## Success Metrics
+
+Font loads without exceeding baseline paint time. WCAG AA contrast ratio maintained (4.5:1 minimum). Component testing completion confirms Comic Sans applies globally via CSS root.
+
+# Edge Cases, Failure Modes, and Risk Mitigation
+
+**Font loading failures revert to cursive, then sans-serif.** Global stylesheet applies Comic Sans as primary font via CSS root. Fallback cascade (`Comic Sans, cursive, sans-serif`) prevents complete typography collapse across browsers without WOFF2 support (IE11, older mobile browsers).
+
+**Code blocks and form inputs render in Comic Sans.** All elements including `<code>`, `<pre>`, tables, and form inputs inherit the global font. No monospace fallback specified. Older browsers with poor Comic Sans rendering on technical content experience reduced readability.
+
+**Font loading blocks rendering with delayed fallback.** Browsers revert to fallback fonts while loading. Font file size, CDN delivery across regions, and network conditions determine load duration and visual impact.
+
 
 ## Your Task
 
