@@ -1,7 +1,3 @@
-You are implementing an integration plan for a project.
-
-## Integration Plan
-
 # Draggable Video Widget Implementation
 
 This plan outlines the implementation of a draggable video widget that allows users to watch a YouTube video as a floating overlay across an application, with the position saved in localStorage for persistence across page navigation.
@@ -85,14 +81,3 @@ Embeds YouTube video `Yy6fByUmPuE` via `<iframe src="https://www.youtube.com/emb
 Verify YouTube embed (https://www.youtube.com/watch?v=Yy6fByUmPuE) loads with native controls functional. Test localStorage persistence: close browser, reopen, confirm widget position loads at saved coordinates. Validate drag operations work unconstrained across entire viewport without overflow.
 
 Unit tests verify drag events update position state and trigger localStorage writes. Integration tests confirm YouTube IFrame API initializes and play/pause controls work. Widget loads on page navigation with position restored from localStorage. Drag operations update position immediately. No console errors during drag or localStorage operations.
-
-## Your Task
-
-Follow the plan above step-by-step to implement the integration. The plan has been generated with all necessary context and steps.
-
-IMPORTANT:
-- Follow the plan exactly as written
-- Complete all setup, integration, and verification steps
-- Make all necessary code changes
-- Install any required packages
-- The plan is cached in AI cache for reference

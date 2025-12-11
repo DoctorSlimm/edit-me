@@ -8,6 +8,7 @@ import VisitorCounter from "./components/VisitorCounter";
 import ServerVisitorCounter from "./components/ServerVisitorCounter";
 import SnowflakeContainer from "./components/SnowflakeContainer";
 import Counter from "./components/Counter";
+import DraggableVideoWidget from "./components/DraggableVideoWidget";
 
 // Feature flag for snowflake effect - can be toggled via environment variable or configuration
 const SNOWFLAKE_FEATURE_ENABLED = true;
@@ -178,6 +179,9 @@ export default function Home() {
           animation: marquee 20s linear infinite;
         }
       `}</style>
+
+      {/* Draggable Video Widget */}
+      <DraggableVideoWidget />
 
       {/* Theme Toggle */}
       <ThemeToggle />
