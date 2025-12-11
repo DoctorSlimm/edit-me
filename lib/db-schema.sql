@@ -102,3 +102,80 @@ FROM (
 CROSS JOIN color_palettes p
 WHERE p.name = 'green-variants'
 ON CONFLICT (palette_id, name, tonal_level) DO NOTHING;
+
+-- ============================================================================
+-- REAL-TIME COLLABORATION TABLES
+-- ============================================================================
+
+-- Collaborative Documents Table
+CREATE TABLE IF NOT EXISTS documents (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  owner_id VARCHAR(255) NOT NULL,
+  title VARCHAR(255) NOT NULL,
+  content TEXT DEFAULT '',
+  version INTEGER DEFAULT 0,
+  status VARCHAR(50) DEFAULT 'active', -- active, archived, deleted
+  visibility VARCHAR(50) DEFAULT 'private', -- private, shared, public
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  deleted_at TIMESTAMP NULL
+);
+
+-- Document Sharing & Permissions
+CREATE TABLE IF NOT EXISTS document_permissions (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  document_id UUID NOT NULL REFERENCES documents(id) ON DELETE CASCADE,
+  user_id VARCHAR(255) NOT NULL,
+  permission_level VARCHAR(50) NOT NULL, -- viewer, editor, admin
+  shared_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE(document_id, user_id)
+);
+
+-- Operational Transform Operations Log
+CREATE TABLE IF NOT EXISTS document_operations (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  document_id UUID NOT NULL REFERENCES documents(id) ON DELETE CASCADE,
+  user_id VARCHAR(255) NOT NULL,
+  operation_type VARCHAR(50) NOT NULL, -- insert, delete, replace
+  position INTEGER NOT NULL,
+  content VARCHAR(10000),
+  client_version INTEGER NOT NULL,
+  server_version INTEGER NOT NULL,
+  timestamp BIGINT NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- User Presence & Cursor Tracking
+CREATE TABLE IF NOT EXISTS active_sessions (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  document_id UUID NOT NULL REFERENCES documents(id) ON DELETE CASCADE,
+  user_id VARCHAR(255) NOT NULL,
+  cursor_position INTEGER DEFAULT 0,
+  selection_start INTEGER DEFAULT NULL,
+  selection_end INTEGER DEFAULT NULL,
+  color VARCHAR(7) NOT NULL DEFAULT '#3B82F6',
+  last_activity TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  connection_id VARCHAR(255) UNIQUE NOT NULL
+);
+
+-- Document Change History
+CREATE TABLE IF NOT EXISTS document_history (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  document_id UUID NOT NULL REFERENCES documents(id) ON DELETE CASCADE,
+  user_id VARCHAR(255) NOT NULL,
+  version INTEGER NOT NULL,
+  snapshot TEXT NOT NULL,
+  operation_count INTEGER DEFAULT 0,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Indexes for Performance
+CREATE INDEX IF NOT EXISTS idx_documents_owner_id ON documents(owner_id);
+CREATE INDEX IF NOT EXISTS idx_documents_updated_at ON documents(updated_at);
+CREATE INDEX IF NOT EXISTS idx_permissions_user_id ON document_permissions(user_id);
+CREATE INDEX IF NOT EXISTS idx_permissions_document_id ON document_permissions(document_id);
+CREATE INDEX IF NOT EXISTS idx_operations_document_id ON document_operations(document_id);
+CREATE INDEX IF NOT EXISTS idx_operations_version ON document_operations(server_version);
+CREATE INDEX IF NOT EXISTS idx_sessions_document_id ON active_sessions(document_id);
+CREATE INDEX IF NOT EXISTS idx_sessions_user_id ON active_sessions(user_id);
+CREATE INDEX IF NOT EXISTS idx_history_document_id ON document_history(document_id);
