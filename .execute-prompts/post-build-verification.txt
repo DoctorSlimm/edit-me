@@ -1,0 +1,12 @@
+You are verifying that the project builds correctly after the integration changes.
+
+TASK: Run the build command and verify it succeeds.
+
+1. Run the build command
+2. If there are any errors, fix them
+3. Re-run the build until it succeeds
+4. Report the final status
+
+IMPORTANT:
+- Fix any build errors that arise from the integration
+- Ensure the build succeeds before completing

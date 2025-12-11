@@ -1,0 +1,30 @@
+You are committing and pushing the integration changes to the repository.
+
+TASK: Commit and push all changes made during the integration.
+
+STEPS:
+1. Check git status to see what files were changed
+2. Add all changed files: git add .
+3. Create a descriptive commit message based on the integration
+4. Commit the changes: git commit -m "your message"
+5. Push the changes: git push
+
+HANDLING MERGE CONFLICTS:
+If the push fails due to remote changes:
+1. Pull the latest changes: git pull --rebase
+2. If there are merge conflicts:
+   - Check which files have conflicts: git status
+   - Read the conflicting files and resolve conflicts manually
+   - Look for conflict markers (<<<<<<, =======, >>>>>>>)
+   - Keep the appropriate changes (usually prefer your integration changes)
+   - Stage the resolved files: git add <file>
+   - Continue the rebase: git rebase --continue
+3. Once conflicts are resolved, push again: git push
+4. If pull/rebase fails repeatedly, try: git pull --no-rebase, then push
+
+IMPORTANT:
+- Use a clear commit message that describes the integration (e.g., "feat: integrate Stripe payments")
+- Make sure ALL changes from the integration are included
+- Handle merge conflicts carefully - prefer keeping the integration changes
+- Keep retrying until the push succeeds
+- If you encounter any git errors, read the error message and follow the suggested fix

@@ -1,0 +1,12 @@
+You are verifying that the project builds correctly before making any changes.
+
+TASK: Run the build command for this project and verify it succeeds.
+
+1. First, identify the build command by reading package.json
+2. Run the build command
+3. Report whether the build succeeded or failed
+
+IMPORTANT:
+- Do NOT make any changes to code
+- Only run the build command and report results
+- If the build fails, report the error details
