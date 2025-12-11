@@ -5,6 +5,7 @@ import ThemeToggle from "./components/ThemeToggle";
 import { ColorPaletteSwitcher } from "./components/ColorPaletteSwitcher";
 import VisitorCounter from "./components/VisitorCounter";
 import SnowflakeContainer from "./components/SnowflakeContainer";
+import Counter from "./components/Counter";
 
 // Feature flag for snowflake effect - can be toggled via environment variable or configuration
 const SNOWFLAKE_FEATURE_ENABLED = true;
@@ -47,6 +48,8 @@ export default function Home() {
 
         {/* Visitor Counter Component */}
         <VisitorCounter />
+        {/* Counter Component */}
+        <Counter />
 
         {/* RED FEATURE BOX - ENHANCED */}
         <div className="bg-red-600 border-4 border-red-700 p-6 max-w-2xl w-full mb-8 shadow-lg">
