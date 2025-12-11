@@ -1,40 +1,25 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import ChatWoot from "./components/ChatWoot";
 import ThemeToggle from "./components/ThemeToggle";
 import { ColorPaletteSwitcher } from "./components/ColorPaletteSwitcher";
 import VisitorCounter from "./components/VisitorCounter";
+import SnowflakeContainer from "./components/SnowflakeContainer";
+
+// Feature flag for snowflake effect - can be toggled via environment variable or configuration
+const SNOWFLAKE_FEATURE_ENABLED = true;
 
 export default function Home() {
-  const [snowflakes, setSnowflakes] = useState<Array<{ id: number; left: number; delay: number; duration: number }>>([]);
-
-  useEffect(() => {
-    const flakes = Array.from({ length: 50 }, (_, i) => ({
-      id: i,
-      left: Math.random() * 100,
-      delay: Math.random() * 5,
-      duration: 5 + Math.random() * 10,
-    }));
-    setSnowflakes(flakes);
-  }, []);
-
   return (
     <div className="min-h-screen bg-gradient-to-b from-red-900 via-red-700 to-red-900 font-mono relative overflow-hidden">
-      {/* Snowflakes */}
-      {snowflakes.map((flake) => (
-        <div
-          key={flake.id}
-          className="absolute top-0 text-white text-xl animate-fall pointer-events-none"
-          style={{
-            left: `${flake.left}%`,
-            animationDelay: `${flake.delay}s`,
-            animationDuration: `${flake.duration}s`,
-          }}
-        >
-          ❄
-        </div>
-      ))}
+      {/* Enhanced Snowflake Container with hundreds of animated snowflakes */}
+      <SnowflakeContainer
+        enabled={SNOWFLAKE_FEATURE_ENABLED}
+        snowflakeCount={300}
+        speed={1}
+        windStrength={0.3}
+        opacity={0.8}
+      />
 
       {/* Main Content */}
       <main className="relative z-10 flex flex-col items-center justify-center min-h-screen p-8">
@@ -168,17 +153,6 @@ export default function Home() {
       </main>
 
       <style jsx>{`
-        @keyframes fall {
-          0% {
-            transform: translateY(-10vh) rotate(0deg);
-            opacity: 1;
-          }
-          100% {
-            transform: translateY(110vh) rotate(360deg);
-            opacity: 0.8;
-          }
-        }
-
         @keyframes marquee {
           0% {
             transform: translateX(100%);
@@ -186,10 +160,6 @@ export default function Home() {
           100% {
             transform: translateX(-100%);
           }
-        }
-
-        .animate-fall {
-          animation: fall linear infinite;
         }
 
         .animate-marquee {
