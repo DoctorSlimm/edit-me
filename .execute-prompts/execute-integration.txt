@@ -4,11 +4,11 @@ You are implementing an integration plan for a project.
 
 # Integration Plan
 
-{"answers":[{"answer":"Environmental/urban forestry management system tracking tree inventory and pl
+{"answers":[{"answer":"A user-facing UI counter (e.g., likes, cart items, page visits)","question":"
 
 ## Implementation Plan
 
-{"answers":[{"answer":"Environmental/urban forestry management system tracking tree inventory and planting","question":"The transcript only says 'Add more trees'. Is this a literal requirement for a real estate/environmental management application, or is this placeholder/test content? What is the actual project or product you're building?"},{"answer":"Starting from scratch - greenfield project with no existing systems","question":"What is the current state of the application? Do you have existin
+{"answers":[{"answer":"A user-facing UI counter (e.g., likes, cart items, page visits)","question":"What is the primary use case for this counter? Is it for user interactions, system metrics, inventory tracking, real-time data, or something else?"},{"answer":"Low scale (< 100 updates per second, single server sufficient)","question":"What are your scale expectations for concurrent counter updates?"},{"answer":"In-memory only (resets on restart, fastest performance)","question":"Should counter st
 
 ## Your Task
 

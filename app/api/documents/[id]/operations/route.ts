@@ -14,10 +14,16 @@ import {
 } from '@/lib/collaboration/operational-transform';
 import type { DocumentOperation } from '@/lib/collaboration/types';
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL || '',
-  process.env.SUPABASE_SERVICE_ROLE_KEY || ''
-);
+function getSupabaseClient() {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+  if (!url || !key) {
+    throw new Error('Missing Supabase credentials. Please configure NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY.');
+  }
+
+  return createClient(url, key);
+}
 
 /**
  * GET /api/documents/[id]/operations
@@ -28,6 +34,7 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const supabase = getSupabaseClient();
     const { id: documentId } = await params;
     const authHeader = request.headers.get('authorization');
 
@@ -97,6 +104,7 @@ export async function POST(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const supabase = getSupabaseClient();
     const { id: documentId } = await params;
     const authHeader = request.headers.get('authorization');
 
