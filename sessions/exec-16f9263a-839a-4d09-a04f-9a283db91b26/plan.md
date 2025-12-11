@@ -1,7 +1,3 @@
-You are implementing an integration plan for a project.
-
-## Integration Plan
-
 # Video Functionality Removal Plan
 
 This plan outlines the steps to remove video functionality from the system, including the deletion of components, APIs, and third-party integrations, with a focus on a single-release deployment strategy.
@@ -114,14 +110,3 @@ Single release removes all video functionality for all users simultaneously. Del
 Codebase scan for "video", "youtube", "embed", "mux", "cloudinary" to catch legacy code patterns. Deploy localStorage cleanup to remove videoWidgetPosition keys with error handling for undefined references. Disable third-party API keys and remove configuration variables.
 
 Monitor for 404 errors on removed endpoints, client-side console errors referencing DraggableVideoWidget, and confirm localStorage cleanup completes without errors across browsers. Validate no user sessions reference deprecated video props.
-
-## Your Task
-
-Follow the plan above step-by-step to implement the integration. The plan has been generated with all necessary context and steps.
-
-IMPORTANT:
-- Follow the plan exactly as written
-- Complete all setup, integration, and verification steps
-- Make all necessary code changes
-- Install any required packages
-- The plan is cached in AI cache for reference
