@@ -1,7 +1,5 @@
 'use client';
 
-import { useEffect } from 'react';
-
 export default function GlobalError({
   error,
   reset,
@@ -9,10 +7,10 @@ export default function GlobalError({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
-  useEffect(() => {
-    // Log error to error tracking service
+  // Log error directly without useEffect to avoid async storage issues during build
+  if (typeof window !== 'undefined') {
     console.error('Global error:', error);
-  }, [error]);
+  }
 
   return (
     <html>
