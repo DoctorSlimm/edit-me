@@ -4,11 +4,11 @@ You are implementing an integration plan for a project.
 
 # Integration Plan
 
-{"answers":[{"answer":"A real-time collaboration tool (like shared document editing or live commenting)","question":"What is the primary system or feature you're building, and what core problem does it solve for your users?"},{"answer":"PostgreSQL (relational, strong for structured data and transactions)","question":"For data persistence, what database technology do you currently use or prefer?"},{"answer":"Small scale: 100-1,000 active users initially, modest growth","question":"What is your expected user scale and growth rate?"}]}
+{"answers":[{"answer":"New standalone counter application (starting from scratch)","question":"What 
 
 ## Implementation Plan
 
-{"answers":[{"answer":"A real-time collaboration tool (like shared document editing or live commenting)","question":"What is the primary system or feature you're building, and what core problem does it solve for your users?"},{"answer":"PostgreSQL (relational, strong for structured data and transactions)","question":"For data persistence, what database technology do you currently use or prefer?"},{"answer":"Small scale: 100-1,000 active users initially, modest growth","question":"What is your expected user scale and growth rate?"}]}
+{"answers":[{"answer":"New standalone counter application (starting from scratch)","question":"What is the context of this counter application - is this a brand new feature, an enhancement to an existing application, or a standalone product?"},{"answer":"Basic counter with increment/decrement operations only","question":"What type of counter functionality is required - is this a simple increment/decrement counter, or does it need advanced features?"},{"answer":"Browser-only (localStorage/session
 
 ## Your Task
 
