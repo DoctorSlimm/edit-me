@@ -2,15 +2,13 @@ You are implementing an integration plan for a project.
 
 ## Integration Plan
 
-# Snowflake Visual Effects Integration
+# Integration Plan
 
-{"answers":[{"answer":"Visual/decorative effects for a web interface or landing page","question":"What is the primary purpose and context of adding snowflakes? Are they visual effects for a user interface, particle system for a game/animation, winter-themed decorations for a website, or something else?"},{"answer":"Hundreds of snowflakes, needs to support mobile devices and older browsers","question":"What are the performance and scale requirements for the snowflake feature? Do you need this to support hundreds of snowflakes while maintaining 60 FPS on mobile devices?"}]}
+{"answers":[{"answer":"Total page views (simple count increment on each page load)","question":"What
 
 ## Implementation Plan
 
-# Snowflake Feature Implementation
-
-{"answers":[{"answer":"Visual/decorative effects for a web interface or landing page","question":"What is the primary purpose and context of adding snowflakes? Are they visual effects for a user interface, particle system for a game/animation, winter-themed decorations for a website, or something else?"},{"answer":"Hundreds of snowflakes, needs to support mobile devices and older browsers","question":"What are the performance and scale requirements for the snowflake feature? Do you need this to support hundreds of snowflakes while maintaining 60 FPS on mobile devices?"}]}
+{"answers":[{"answer":"Total page views (simple count increment on each page load)","question":"What data accuracy level do you need for the visitor counter - does it need to track unique visitors per session, unique users across all time, or just total page views (which can include repeat visits)?"},{"answer":"Store in existing database (PostgreSQL/MongoDB - requires schema change)","question":"Should the visitor counter be stored in your existing database, or do you prefer a lightweight soluti
 
 ## Your Task
 
