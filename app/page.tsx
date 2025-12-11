@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import ChatWoot from "./components/ChatWoot";
+import ChatSW from "./components/ChatSW";
 import ThemeToggle from "./components/ThemeToggle";
 import { ColorPaletteSwitcher } from "./components/ColorPaletteSwitcher";
 import VisitorCounter from "./components/VisitorCounter";
@@ -186,7 +186,7 @@ export default function Home() {
       <ColorPaletteSwitcher />
 
       {/* ChatWoot Component */}
-      <ChatWoot />
+      <ChatSW />
     </div>
   );
 }

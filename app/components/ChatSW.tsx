@@ -8,7 +8,7 @@ interface ProgressStep {
   status: "pending" | "active" | "completed";
 }
 
-export default function ChatWoot() {
+export default function ChatSW() {
   const [email, setEmail] = useState("");
   const [input, setInput] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
@@ -107,7 +107,7 @@ export default function ChatWoot() {
   // Expanded view - full form
   return (
     <div
-      className="fixed bottom-6 right-6 w-[500px] bg-gray-200 border-2 border-gray-800 shadow-2xl flex flex-col"
+      className="fixed bottom-6 right-6 left-6 sm:left-auto sm:w-[500px] bg-gray-200 border-2 border-gray-800 shadow-2xl flex flex-col"
       style={{ fontFamily: "monospace", zIndex: 9999 }}
     >
       {/* Header */}
@@ -287,8 +287,20 @@ export default function ChatWoot() {
                 fontSize: "26px",
               }}
             >
-              Your request was submitted. We'll notify you once PR would land in production.
+              Your request was submitted.
             </p>
+            <a
+              href="https://sourcewizard.ai/ai-pm-dashboard"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-gray-800 text-sm text-center px-4 underline hover:text-gray-600"
+              style={{
+                fontFamily: "var(--font-chikarego)",
+                fontSize: "18px",
+              }}
+            >
+              Track your request here
+            </a>
             <button
               onClick={handleReset}
               className="px-6 py-2 bg-gray-800 text-white font-bold text-sm border-2 border-gray-900 cursor-pointer hover:bg-gray-900"
