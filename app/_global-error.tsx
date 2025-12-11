@@ -13,7 +13,7 @@ export default function GlobalError({
   }
 
   return (
-    <html>
+    <html suppressHydrationWarning>
       <body style={{ margin: 0, padding: 0 }}>
         <div style={{
           padding: '2rem',
