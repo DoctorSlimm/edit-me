@@ -1,9 +1,11 @@
 "use client";
 
+import Link from "next/link";
 import ChatWoot from "./components/ChatWoot";
 import ThemeToggle from "./components/ThemeToggle";
 import { ColorPaletteSwitcher } from "./components/ColorPaletteSwitcher";
 import VisitorCounter from "./components/VisitorCounter";
+import ServerVisitorCounter from "./components/ServerVisitorCounter";
 import SnowflakeContainer from "./components/SnowflakeContainer";
 import Counter from "./components/Counter";
 
@@ -46,10 +48,13 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Visitor Counter Component */}
+        {/* Original Visitor Counter Component */}
         <VisitorCounter />
         {/* Counter Component */}
         <Counter />
+
+        {/* Server-Side Visitor Counter Component */}
+        <ServerVisitorCounter />
 
         {/* RED FEATURE BOX - ENHANCED */}
         <div className="bg-red-600 border-4 border-red-700 p-6 max-w-2xl w-full mb-8 shadow-lg">
@@ -85,6 +90,9 @@ export default function Home() {
             🎁 CHRISTMAS LINKS 🎁
           </h2>
           <div className="space-y-3">
+            <Link href="/stats" className="block bg-red-700 border-2 border-yellow-300 p-3 text-yellow-300 hover:bg-red-600 transition-colors">
+              <span className="text-xl">📊</span> View Visitor Statistics
+            </Link>
             <a href="#" className="block bg-red-700 border-2 border-yellow-300 p-3 text-yellow-300 hover:bg-red-600 transition-colors">
               <span className="text-xl">🎵</span> Listen to Jingle Bells (MIDI)
             </a>
