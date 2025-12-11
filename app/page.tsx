@@ -18,7 +18,7 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-red-900 via-green-900 to-red-900 font-mono relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-b from-red-900 via-red-700 to-red-900 font-mono relative overflow-hidden">
       {/* Snowflakes */}
       {snowflakes.map((flake) => (
         <div
@@ -36,19 +36,19 @@ export default function Home() {
 
       {/* Main Content */}
       <main className="relative z-10 flex flex-col items-center justify-center min-h-screen p-8">
-        {/* GREEN FEATURE BANNER - NEW */}
+        {/* RED FEATURE BANNER - UPDATED */}
         <div className="mb-8 w-full max-w-2xl">
-          <div className="bg-gradient-to-r from-green-500 via-green-400 to-green-500 border-4 border-green-700 p-6 rounded-lg shadow-2xl animate-pulse">
+          <div className="bg-gradient-to-r from-red-500 via-red-400 to-red-500 border-4 border-red-700 p-6 rounded-lg shadow-2xl animate-pulse">
             <div className="text-center">
-              <p className="text-4xl font-bold text-white mb-2">✨ GREEN INITIATIVE ✨</p>
-              <p className="text-lg text-green-50 font-semibold">Celebrating Environmental Excellence & Holiday Cheer</p>
+              <p className="text-4xl font-bold text-white mb-2">✨ RED INITIATIVE ✨</p>
+              <p className="text-lg text-red-50 font-semibold">Celebrating Holiday Excellence & Festive Cheer</p>
             </div>
           </div>
         </div>
 
         {/* Blinking Header */}
         <div className="mb-8 text-center">
-          <h1 className="text-6xl font-bold text-yellow-300 animate-pulse mb-4" style={{ textShadow: '3px 3px 0px #ff0000, 6px 6px 0px #00ff00' }}>
+          <h1 className="text-6xl font-bold text-yellow-300 animate-pulse mb-4" style={{ textShadow: '3px 3px 0px #ff0000, 6px 6px 0px #DC143C' }}>
             🎄 MERRY CHRISTMAS 🎄
           </h1>
           <div className="border-4 border-dashed border-yellow-300 p-4 bg-red-800 bg-opacity-80">
@@ -59,9 +59,9 @@ export default function Home() {
         </div>
 
         {/* Retro Counter */}
-        <div className="bg-green-800 border-4 border-yellow-300 p-6 mb-8 max-w-2xl w-full">
-          <div className="bg-black p-4 border-2 border-green-400 mb-4">
-            <p className="text-green-400 text-center text-xl font-bold mb-2">
+        <div className="bg-red-800 border-4 border-yellow-300 p-6 mb-8 max-w-2xl w-full">
+          <div className="bg-black p-4 border-2 border-red-400 mb-4">
+            <p className="text-red-400 text-center text-xl font-bold mb-2">
               🎅 VISITOR COUNTER 🎅
             </p>
             <div className="flex justify-center gap-2">
@@ -79,17 +79,17 @@ export default function Home() {
           </div>
         </div>
 
-        {/* GREEN FEATURE BOX - ENHANCED */}
-        <div className="bg-green-600 border-4 border-green-700 p-6 max-w-2xl w-full mb-8 shadow-lg">
+        {/* RED FEATURE BOX - ENHANCED */}
+        <div className="bg-red-600 border-4 border-red-700 p-6 max-w-2xl w-full mb-8 shadow-lg">
           <h2 className="text-3xl text-white text-center mb-4 font-bold underline">
-            🌿 GREEN STATUS INDICATOR 🌿
+            🎅 RED STATUS INDICATOR 🎅
           </h2>
-          <div className="bg-green-700 border-2 border-green-400 p-4 rounded text-center">
+          <div className="bg-red-700 border-2 border-red-400 p-4 rounded text-center">
             <div className="flex justify-center mb-3">
-              <div className="w-6 h-6 bg-green-400 rounded-full animate-pulse"></div>
+              <div className="w-6 h-6 bg-red-400 rounded-full animate-pulse"></div>
             </div>
-            <p className="text-white font-bold text-lg">✓ System Operating at Peak Green Efficiency</p>
-            <p className="text-green-100 text-sm mt-2">Eco-Friendly Mode: ENABLED</p>
+            <p className="text-white font-bold text-lg">✓ System Operating at Peak Red Efficiency</p>
+            <p className="text-red-100 text-sm mt-2">Holiday Mode: ENABLED</p>
           </div>
         </div>
 
@@ -99,29 +99,29 @@ export default function Home() {
             🎁 CHRISTMAS LINKS 🎁
           </h2>
           <div className="space-y-3">
-            <a href="#" className="block bg-green-700 border-2 border-yellow-300 p-3 text-yellow-300 hover:bg-green-600 transition-colors">
+            <a href="#" className="block bg-red-700 border-2 border-yellow-300 p-3 text-yellow-300 hover:bg-red-600 transition-colors">
               <span className="text-xl">🎵</span> Listen to Jingle Bells (MIDI)
             </a>
-            <a href="#" className="block bg-green-700 border-2 border-yellow-300 p-3 text-yellow-300 hover:bg-green-600 transition-colors">
+            <a href="#" className="block bg-red-700 border-2 border-yellow-300 p-3 text-yellow-300 hover:bg-red-600 transition-colors">
               <span className="text-xl">🎅</span> Track Santa&apos;s Location
             </a>
-            <a href="#" className="block bg-green-700 border-2 border-yellow-300 p-3 text-yellow-300 hover:bg-green-600 transition-colors">
+            <a href="#" className="block bg-red-700 border-2 border-yellow-300 p-3 text-yellow-300 hover:bg-red-600 transition-colors">
               <span className="text-xl">🎄</span> ASCII Christmas Tree Gallery
             </a>
-            <a href="#" className="block bg-green-700 border-2 border-yellow-300 p-3 text-yellow-300 hover:bg-green-600 transition-colors">
+            <a href="#" className="block bg-red-700 border-2 border-yellow-300 p-3 text-yellow-300 hover:bg-red-600 transition-colors">
               <span className="text-xl">🎁</span> Sign My Guestbook!
             </a>
           </div>
         </div>
 
-        {/* GREEN ACCENT HIGHLIGHT - NEW */}
+        {/* RED ACCENT HIGHLIGHT - UPDATED */}
         <div className="w-full max-w-2xl mb-8">
-          <div className="bg-gradient-to-r from-green-500 to-green-600 border-4 border-green-700 p-4 rounded-lg">
+          <div className="bg-gradient-to-r from-red-500 to-red-600 border-4 border-red-700 p-4 rounded-lg">
             <p className="text-white text-center font-bold text-lg">
-              🟢 Green Technology Powers This Experience 🟢
+              🔴 Red Holiday Spirit Powers This Experience 🔴
             </p>
-            <p className="text-green-50 text-center text-sm mt-2">
-              Built with sustainable practices and eco-conscious design
+            <p className="text-red-50 text-center text-sm mt-2">
+              Built with festive enthusiasm and holiday-conscious design
             </p>
           </div>
         </div>
