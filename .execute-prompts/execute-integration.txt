@@ -2,88 +2,80 @@ You are implementing an integration plan for a project.
 
 ## Integration Plan
 
-# User-Facing UI Counter Implementation
+# Web-based Music Streaming Service
 
-This plan outlines the implementation of a user-facing UI counter for tracking interactions like likes, cart items, or page visits using a Node.js/Express REST API backend. The counter is designed for low-scale environments, supporting up to 100 updates per second, with in-memory state management that resets on application restart.
+A browser-based music streaming service integrating third-party APIs for anonymous public playback, targeting less than 10,000 monthly active users without user authentication or personalized features.
 
 ## Implementation Plan
 
-# Overview & Objectives
+# Executive Summary
 
-Implement a user-facing counter component for a Node.js/Express REST API backend. The counter tracks UI interactions (likes, cart items, page visits) with increment, decrement, and reset operations.
+Build a web-based music streaming feature for anonymous users using third-party API integrations (Spotify, Apple Music, YouTube Music). Target: <10k monthly active users. Include playback controls (play, pause, skip, volume) and catalog search. No user authentication, playlists, or history tracking required.
 
-## Key Objectives
+Integrate lightweight frontend components with existing music APIs. Use third-party providers for music data and streaming infrastructure. Defer complex features (recommendations, playlists, user accounts) to future phases.
 
-- Store state in-memory for maximum performance
-- Support up to 100 concurrent updates per second on a single server
-- Reset all state on application restart
-
-## Success Criteria
-
-The counter operates immediately on increment/decrement requests. State persists during the application session and integrates with the REST API backend.
-
-# Functional & Non-Functional Requirements
+# Requirements and Scope
 
 ## Functional Requirements
 
-The counter supports three operations: increment (add 1), decrement (subtract 1), and reset (set to 0). State is stored in-memory only and resets on application restart. The counter is a user-facing UI element for tracking likes, cart items, or page visits within the Node.js/Express REST API backend.
+Web-based music streaming service using third-party APIs (Spotify Web API, Apple Music, YouTube Music API). Public, anonymous access only—no authentication or accounts. Playback controls: play, pause, skip, volume. Display track metadata: title, artist, album, duration.
 
 ## Non-Functional Requirements
 
-**Performance:** Less than 100 concurrent updates per second; single server deployment sufficient. In-memory storage provides fastest performance without persistence overhead.
+Browser-based (desktop and mobile web). Target: <10k monthly active users. Search results load under 3 seconds. Handle concurrent playback without degradation. Graceful fallback when third-party APIs unavailable.
 
-**Constraints:** No state persistence across restarts and no external database required.
+## Out of Scope
 
-# Architecture & System Design
+Authentication, accounts, playlists, favorites, playback history, offline playback, file uploads, recommendations, personalization, social features, ad serving, subscription management.
 
-Counter implementation uses Node.js/Express backend with an in-memory state store. The counter module exposes three functions: `increment()`, `decrement()`, and `reset()`. Express route handlers map HTTP requests to these operations and return updated state to the client.
+# System Architecture
 
-State persists in memory only and resets on application restart. No database, state management library, or external service is required. The implementation serves user-facing UI counters (e.g., likes, cart items, page visits) at low scale (< 100 updates per second).
+Three modules integrate music streaming: API Integration Layer (Spotify Web API, Apple Music, YouTube Music API), Playback Engine (browser audio streaming and controls), Catalog Management (search and filtering).
 
-# Data Structures & APIs
+Server-side proxies relay API requests. The browser retrieves track metadata (title, artist, album, duration) on-demand and streams audio directly from music services. Anonymous playback; no authentication required. Web-based, designed for <10k monthly active users.
 
-## Counter State
-Single integer stored in-memory, reset on application restart. Range: JavaScript safe integers (−2^53 + 1 to 2^53 − 1).
+# Data Structures and APIs
 
-## REST API Endpoints
-- `GET /api/counter` - Returns `{ value: <integer> }`
-- `POST /api/counter/increment` - Increases counter by 1, returns `{ value: <integer> }`
-- `POST /api/counter/decrement` - Decreases counter by 1, returns `{ value: <integer> }`
-- `POST /api/counter/reset` - Sets counter to 0, returns `{ value: 0 }`
+Third-party APIs (Spotify Web API, Apple Music API, YouTube Music API) provide music metadata and streaming. JSON responses include track title, artist, album, duration, and stream URL. Error responses include HTTP status code and message string. No authentication headers required; API keys stored server-side.
 
-POST requests accept empty body. Status 200 on success. No authentication required.
+Client-side state holds current search results and playback metadata only. No database schemas, persistence layer, or user sessions. Backend fetches track data by ID or search term from the appropriate service and streams audio to browser. Search latency target: <500ms; stream initialization: <1s.
 
 # Implementation Details
 
-Counter state is in-memory on Node.js/Express, resetting on restart. Three REST endpoints expose counter operations: `GET /counter` returns current value; `POST /counter/increment` and `POST /counter/decrement` modify state and return new value. Each response is JSON containing updated state.
+**Library and Framework Selection**
 
-User interactions trigger HTTP requests to the server, which updates the in-memory counter and returns the new state. Client updates UI from response. Server is single source of truth; no client-side state management required.
+Integrate Spotify Web API as primary catalog and playback control source. Initialize Spotify Web Playback SDK on page load with OAuth token from backend. Store API credentials in server-side environment variables only.
 
-Counter integrates as Express middleware on `/counter` routes. No database or external services. Sub-millisecond response time from in-memory operations. No modifications needed to existing routing or authentication.
+**Playback and Integration**
 
-# Edge Cases, Constraints & Risk Mitigation
+Implement play, pause, seek, and volume controls via SDK methods. Route music requests through a single API endpoint that forwards to Spotify, Apple Music, or YouTube Music APIs. Store no persistent user state—browser memory only. Implement error handling for API unavailability.
 
-Counter state resets to zero on application restart due to in-memory storage. No recovery mechanism exists.
+# Edge Cases and Error Handling
 
-Low-scale expectations (< 100 updates/second, single server) eliminate distributed locking requirements. Node.js event loop handles sequential processing without data corruption.
+Third-party APIs (Spotify, Apple Music, YouTube Music) fail intermittently. Implement exponential backoff with max 3 retries on 429 and 5xx errors; timeout requests at 10 seconds and return cached data if available. Dropped streaming connections pause playback with user notification; do not auto-resume. Display "Service temporarily unavailable" if quota exhausted; queue retry after 60 seconds.
 
-User input validation required for counter operations: reject negative numbers, non-integer values, and null states in Express middleware before state modification.
+Tracks may lack duration, artist, or cover art. Use fallbacks: unknown duration = 0:00, missing artist = "Unknown Artist", missing artwork = gray placeholder. YouTube Music and Spotify return different codecs (mp4a, opus, aac); detect browser support before streaming or notify "Format not supported." Never block playback with incomplete metadata.
 
-# Testing & Validation Strategy
+At <10k MAU, cap concurrent streams to 3 per session; queue additional requests. Monitor memory and pause oldest unused stream if memory > 80%. For persistent service degradation, cache last-known catalog for 24 hours and label as "cached data." Public/anonymous access requires no user-specific recovery paths.
 
-**Unit Tests:** Test increment, decrement, and reset operations. Verify boundary conditions (minimum 0), invalid input rejection, and each REST API endpoint with valid and invalid payloads.
+# Testing and Validation
 
-**Integration Tests:** Verify in-memory state persists across sequential API calls and resets on application restart.
+## Integration and Playback Tests
+Test Spotify, Apple Music, and YouTube Music API endpoints for valid track data and streaming URLs. Test play, pause, stop, and seek controls in Chrome, Firefox, and Safari. Validate error handling for API 4xx/5xx responses and network timeouts. Test catalog search and track metadata retrieval using mock API responses.
 
-**Acceptance Criteria:** Counter increments, decrements, and resets correctly via REST endpoints. In-memory state reflects all operations immediately. All unit and integration tests pass with zero failures.
+## Performance Targets
+Single-user latency: ≤2 seconds from search to audio playback. Browser memory usage: <150MB per concurrent anonymous session. Third-party API response times: <500ms for search and track fetches. Continuous playback without buffering interruption for 10-minute tracks.
 
-# Deployment & Rollout Plan
+## Acceptance Criteria
+Search results display within 3 seconds. Playback starts within 2 seconds of selection. Seek, volume, and queue controls respond immediately without authentication. Graceful degradation when any third-party API is unavailable—show cached results or disable affected source only.
 
-Deploy counter endpoints as a Node.js/Express REST API update during low-traffic windows. Single production deployment required; no phased rollout needed for sub-100 updates-per-second scale. Monitor first 2 hours post-deployment for endpoint stability.
+# Performance and Constraints
 
-Rollback returns to previous deployment version if critical errors occur. In-memory state resets on rollback; no data recovery required.
+API calls to third-party services (Spotify, Apple Music, YouTube Music) must return within 2-3 seconds. Playback buffering must complete within 500ms. Browser playback controls require sub-100ms response times.
 
-**Success Metrics:** Counter endpoints respond in <200ms (95th percentile), operations complete without error at 50 concurrent updates/second, zero unhandled exceptions during 24-hour post-deployment window.
+Target: <10k monthly active users with peak concurrent sessions at 100-200 users. No database storage required for anonymous playback.
+
+Web-only browser implementation. Standard broadband speeds (5+ Mbps) assumed for playback. Browser memory usage capped at 50MB per session.
 
 ## Your Task
 
