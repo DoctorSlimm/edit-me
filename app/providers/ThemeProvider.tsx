@@ -1,40 +1,43 @@
 'use client';
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { getThemePreference, setThemePreference, applyThemeInversion } from '@/lib/theme';
+import { getThemePreference, setThemePreference, applyTheme } from '@/lib/theme';
 
 interface ThemeContextType {
-  backgroundInverted: boolean;
-  toggleBackgroundInversion: (value: boolean) => Promise<void>;
+  mode: 'light' | 'dark';
+  toggleTheme: () => Promise<void>;
   isLoading: boolean;
 }
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [backgroundInverted, setBackgroundInverted] = useState(false);
+  const [mode, setMode] = useState<'light' | 'dark'>('light');
   const [isLoading, setIsLoading] = useState(true);
 
   // Initialize theme from localStorage on mount
   useEffect(() => {
-    const inverted = getThemePreference();
-    setBackgroundInverted(inverted);
-    applyThemeInversion(inverted);
+    const savedMode = getThemePreference();
+    setMode(savedMode);
+    applyTheme(savedMode);
     setIsLoading(false);
   }, []);
 
-  const toggleBackgroundInversion = async (value: boolean) => {
+  const toggleTheme = async () => {
     try {
       setIsLoading(true);
 
+      // Calculate next mode
+      const nextMode: 'light' | 'dark' = mode === 'light' ? 'dark' : 'light';
+
       // Update state
-      setBackgroundInverted(value);
+      setMode(nextMode);
 
       // Persist to localStorage
-      setThemePreference(value);
+      setThemePreference(nextMode);
 
-      // Apply the filter
-      applyThemeInversion(value);
+      // Apply the theme
+      applyTheme(nextMode);
 
       // Try to sync with API if authenticated
       try {
@@ -43,7 +46,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ backgroundInverted: value }),
+          body: JSON.stringify({ mode: nextMode }),
         });
       } catch (apiError) {
         console.warn('Failed to sync theme preference with API:', apiError);
@@ -53,8 +56,8 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       console.error('Failed to update theme preference:', error);
       // Rollback on error
       const previous = getThemePreference();
-      setBackgroundInverted(previous);
-      applyThemeInversion(previous);
+      setMode(previous);
+      applyTheme(previous);
       throw error;
     } finally {
       setIsLoading(false);
@@ -62,7 +65,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <ThemeContext.Provider value={{ backgroundInverted, toggleBackgroundInversion, isLoading }}>
+    <ThemeContext.Provider value={{ mode, toggleTheme, isLoading }}>
       {children}
     </ThemeContext.Provider>
   );

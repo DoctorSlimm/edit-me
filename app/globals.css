@@ -1,38 +1,156 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-  /* Red Design Tokens for UI Enhancement */
-  --red-primary: #DC143C;
-  --red-secondary: #B91C1C;
-  --red-accent: #F87171;
-  --red-dark: #7F1D1D;
-  --red-light: #FEE2E2;
-  /* Legacy Green Tokens - Maintained for Backward Compatibility */
-  --green-primary: #DC143C;
-  --green-secondary: #B91C1C;
-  --green-accent: #F87171;
-  --green-dark: #7F1D1D;
-  --green-light: #FEE2E2;
+  /* Light Mode (Default) */
+  --bg-background: #ffffff;
+  --bg-surface: #f8f9fa;
+  --bg-surface-alt: #eff2f5;
+
+  --text-primary: #171717;
+  --text-secondary: #666666;
+  --text-tertiary: #999999;
+  --text-muted: #cccccc;
+
+  --color-primary: #22c55e;
+  --color-primary-hover: #16a34a;
+  --color-primary-light: #4ade80;
+  --color-primary-dark: #15803d;
+  --color-primary-very-light: #dcfce7;
+
+  --color-success: #22c55e;
+  --color-error: #ef4444;
+  --color-warning: #f59e0b;
+  --color-info: #3b82f6;
+
+  --border-color: #e5e7eb;
+  --divider-color: #f3f4f6;
+  --overlay-color: rgba(0, 0, 0, 0.5);
+  --overlay-light-color: rgba(0, 0, 0, 0.1);
+
+  color-scheme: light;
+}
+
+/* Dark Mode */
+:root.dark {
+  --bg-background: #0a0a0a;
+  --bg-surface: #1a1a1a;
+  --bg-surface-alt: #262626;
+
+  --text-primary: #ededed;
+  --text-secondary: #a3a3a3;
+  --text-tertiary: #7a7a7a;
+  --text-muted: #525252;
+
+  --color-primary: #34d399;
+  --color-primary-hover: #10b981;
+  --color-primary-light: #6ee7b7;
+  --color-primary-dark: #059669;
+  --color-primary-very-light: #d1fae5;
+
+  --color-success: #10b981;
+  --color-error: #ef4444;
+  --color-warning: #fbbf24;
+  --color-info: #60a5fa;
+
+  --border-color: #404040;
+  --divider-color: #2a2a2a;
+  --overlay-color: rgba(255, 255, 255, 0.1);
+  --overlay-light-color: rgba(255, 255, 255, 0.05);
+
+  color-scheme: dark;
+}
+
+:root[data-theme="light"] {
+  --bg-background: #ffffff;
+  --bg-surface: #f8f9fa;
+  --bg-surface-alt: #eff2f5;
+
+  --text-primary: #171717;
+  --text-secondary: #666666;
+  --text-tertiary: #999999;
+  --text-muted: #cccccc;
+
+  --color-primary: #22c55e;
+  --color-primary-hover: #16a34a;
+  --color-primary-light: #4ade80;
+  --color-primary-dark: #15803d;
+  --color-primary-very-light: #dcfce7;
+
+  --color-success: #22c55e;
+  --color-error: #ef4444;
+  --color-warning: #f59e0b;
+  --color-info: #3b82f6;
+
+  --border-color: #e5e7eb;
+  --divider-color: #f3f4f6;
+  --overlay-color: rgba(0, 0, 0, 0.5);
+  --overlay-light-color: rgba(0, 0, 0, 0.1);
+
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  --bg-background: #0a0a0a;
+  --bg-surface: #1a1a1a;
+  --bg-surface-alt: #262626;
+
+  --text-primary: #ededed;
+  --text-secondary: #a3a3a3;
+  --text-tertiary: #7a7a7a;
+  --text-muted: #525252;
+
+  --color-primary: #34d399;
+  --color-primary-hover: #10b981;
+  --color-primary-light: #6ee7b7;
+  --color-primary-dark: #059669;
+  --color-primary-very-light: #d1fae5;
+
+  --color-success: #10b981;
+  --color-error: #ef4444;
+  --color-warning: #fbbf24;
+  --color-info: #60a5fa;
+
+  --border-color: #404040;
+  --divider-color: #2a2a2a;
+  --overlay-color: rgba(255, 255, 255, 0.1);
+  --overlay-light-color: rgba(255, 255, 255, 0.05);
+
+  color-scheme: dark;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  --color-background: var(--bg-background);
+  --color-foreground: var(--text-primary);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+body {
+  background: var(--bg-background);
+  color: var(--text-primary);
+  font-family: Arial, Helvetica, sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Smooth transitions for theme changes */
+* {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Ensure proper contrast in both modes */
+a {
+  color: var(--color-primary);
+}
+
+a:hover {
+  color: var(--color-primary-hover);
+}
+
+button {
+  transition: all 0.3s ease;
+}
+
+input[type="checkbox"],
+input[type="radio"] {
+  accent-color: var(--color-primary);
 }
