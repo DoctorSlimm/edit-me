@@ -11,7 +11,7 @@ const SNOWFLAKE_FEATURE_ENABLED = true;
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-red-900 via-red-700 to-red-900 font-mono relative overflow-hidden">
+    <div className="min-h-screen bg-blue-600 font-mono relative overflow-hidden">
       {/* Enhanced Snowflake Container with hundreds of animated snowflakes */}
       <SnowflakeContainer
         enabled={SNOWFLAKE_FEATURE_ENABLED}
