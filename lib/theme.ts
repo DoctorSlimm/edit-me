@@ -13,6 +13,7 @@ export interface UserThemePreference {
 }
 
 export const THEME_STORAGE_KEY = 'user:theme:mode';
+export const BACKGROUND_INVERSION_KEY = 'user:theme:background-inverted';
 
 /**
  * Get the current theme mode from localStorage
@@ -44,6 +45,39 @@ export function setThemePreference(mode: 'light' | 'dark'): void {
     localStorage.setItem(THEME_STORAGE_KEY, mode);
   } catch (error) {
     console.warn('Failed to save theme preference to localStorage:', error);
+  }
+}
+
+/**
+ * Get the background inversion preference from localStorage
+ * Defaults to false
+ */
+export function getBackgroundInversionPreference(): boolean {
+  if (typeof window === 'undefined') {
+    return false;
+  }
+
+  try {
+    const stored = localStorage.getItem(BACKGROUND_INVERSION_KEY);
+    return stored === 'true';
+  } catch (error) {
+    console.warn('Failed to read background inversion preference from localStorage:', error);
+    return false;
+  }
+}
+
+/**
+ * Set the background inversion preference in localStorage
+ */
+export function setBackgroundInversionPreference(inverted: boolean): void {
+  if (typeof window === 'undefined') {
+    return;
+  }
+
+  try {
+    localStorage.setItem(BACKGROUND_INVERSION_KEY, inverted ? 'true' : 'false');
+  } catch (error) {
+    console.warn('Failed to save background inversion preference to localStorage:', error);
   }
 }
 
@@ -89,7 +123,7 @@ export function toggleTheme(): 'light' | 'dark' {
 }
 
 /**
- * Apply background color inversion filter to the document
+ * Apply background inversion filter via CSS
  */
 export function applyThemeInversion(inverted: boolean): void {
   if (typeof document === 'undefined') {

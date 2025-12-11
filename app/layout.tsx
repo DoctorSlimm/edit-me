@@ -4,6 +4,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import Script from "next/script";
 import { ThemeProvider } from "./providers/ThemeProvider";
+import { AuthProvider } from "./providers/AuthProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -42,9 +43,11 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${fontChiKaReGo.variable} antialiased`}
       >
-        <ThemeProvider>
-          {children}
-        </ThemeProvider>
+        <AuthProvider>
+          <ThemeProvider>
+            {children}
+          </ThemeProvider>
+        </AuthProvider>
       </body>
     </html>
   );

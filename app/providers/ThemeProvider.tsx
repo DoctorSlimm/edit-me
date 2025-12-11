@@ -1,7 +1,14 @@
 'use client';
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { getThemePreference, setThemePreference, applyTheme, applyThemeInversion } from '@/lib/theme';
+import {
+  getThemePreference,
+  setThemePreference,
+  applyTheme,
+  applyThemeInversion,
+  getBackgroundInversionPreference,
+  setBackgroundInversionPreference
+} from '@/lib/theme';
 import {
   fetchColorPalettes,
   fetchColorPalette,
@@ -77,8 +84,8 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
         setMode(savedMode);
         applyTheme(savedMode);
 
-        // Load background inversion preference (default to false)
-        const inverted = false;
+        // Load background inversion preference
+        const inverted = getBackgroundInversionPreference();
         setBackgroundInverted(inverted);
         applyThemeInversion(inverted);
 
@@ -152,6 +159,9 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       // Update state
       setBackgroundInverted(value);
 
+      // Persist to localStorage
+      setBackgroundInversionPreference(value);
+
       // Apply the filter
       applyThemeInversion(value);
 
@@ -171,8 +181,9 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     } catch (error) {
       console.error('Failed to update theme preference:', error);
       // Rollback on error
-      setBackgroundInverted(!value);
-      applyThemeInversion(!value);
+      const previous = getBackgroundInversionPreference();
+      setBackgroundInverted(previous);
+      applyThemeInversion(previous);
       throw error;
     } finally {
       setIsLoading(false);
