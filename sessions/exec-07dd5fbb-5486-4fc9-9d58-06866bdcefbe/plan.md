@@ -1,7 +1,3 @@
-You are implementing an integration plan for a project.
-
-## Integration Plan
-
 # A user-facing web application with authentication and data persistence
 
 Build a web application with user authentication and data persistence. Target MVP: <1,000 users. Expected growth: 10x within six months. Authentication: JWT with password-based login. Data: PostgreSQL. Time-to-market is the primary constraint. Launch with focused features; refactor later as needed.
@@ -104,14 +100,3 @@ Zero authentication bypass vulnerabilities before launch. User registration and 
 ## Configuration
 
 TypeScript: ES2017 target, strict mode enabled, @/* path aliases. Next.js API routes for endpoints. Supabase SDK for database abstraction.
-
-## Your Task
-
-Follow the plan above step-by-step to implement the integration. The plan has been generated with all necessary context and steps.
-
-IMPORTANT:
-- Follow the plan exactly as written
-- Complete all setup, integration, and verification steps
-- Make all necessary code changes
-- Install any required packages
-- The plan is cached in AI cache for reference
