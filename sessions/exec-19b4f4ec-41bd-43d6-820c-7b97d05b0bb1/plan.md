@@ -1,7 +1,3 @@
-You are implementing an integration plan for a project.
-
-## Integration Plan
-
 # Standalone Counter Application
 
 A simple counter application that allows users to increment and decrement a counter value, with state persistence in the browser using localStorage, designed for under 100 users and deployed on serverless platforms like Vercel or AWS Lambda.
@@ -75,14 +71,3 @@ Unit tests verify increment/decrement operations modify state correctly, initial
 Integration tests confirm increment and decrement buttons update the displayed counter value, state persists after page refresh, and no backend calls occur.
 
 Acceptance criteria: counter displays numeric value, increment increases by 1, decrement decreases by 1, state persists in localStorage, application works in browser without server dependencies.
-
-## Your Task
-
-Follow the plan above step-by-step to implement the integration. The plan has been generated with all necessary context and steps.
-
-IMPORTANT:
-- Follow the plan exactly as written
-- Complete all setup, integration, and verification steps
-- Make all necessary code changes
-- Install any required packages
-- The plan is cached in AI cache for reference
