@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import ChatWoot from "./components/ChatWoot";
 import ThemeToggle from "./components/ThemeToggle";
 import { ColorPaletteSwitcher } from "./components/ColorPaletteSwitcher";
+import VisitorCounter from "./components/VisitorCounter";
 
 export default function Home() {
   const [snowflakes, setSnowflakes] = useState<Array<{ id: number; left: number; delay: number; duration: number }>>([]);
@@ -59,26 +60,8 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Retro Counter */}
-        <div className="bg-red-800 border-4 border-yellow-300 p-6 mb-8 max-w-2xl w-full">
-          <div className="bg-black p-4 border-2 border-red-400 mb-4">
-            <p className="text-red-400 text-center text-xl font-bold mb-2">
-              🎅 VISITOR COUNTER 🎅
-            </p>
-            <div className="flex justify-center gap-2">
-              {[1,9,9,7].map((num, i) => (
-                <div key={i} className="bg-red-600 border-2 border-yellow-300 px-4 py-2 text-3xl text-yellow-300 font-bold">
-                  {num}
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="text-center text-yellow-300 space-y-2">
-            <p className="text-xl">🔔 Ho Ho Ho! 🔔</p>
-            <p className="text-lg">You are visitor #1997!</p>
-          </div>
-        </div>
+        {/* Visitor Counter Component */}
+        <VisitorCounter />
 
         {/* RED FEATURE BOX - ENHANCED */}
         <div className="bg-red-600 border-4 border-red-700 p-6 max-w-2xl w-full mb-8 shadow-lg">
