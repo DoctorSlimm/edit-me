@@ -27,6 +27,32 @@
   --overlay-color: rgba(0, 0, 0, 0.5);
   --overlay-light-color: rgba(0, 0, 0, 0.1);
 
+  /* Red Color Variants - Design System */
+  /* Light: For subtle backgrounds or hover states */
+  --color-red-light: #FECACA;
+  /* Standard: For primary error messages and warnings */
+  --color-red-standard: #EF4444;
+  /* Dark: For destructive actions and critical alerts */
+  --color-red-dark: #7F1D1D;
+
+  /* Usage Context Variables */
+  --color-error-background: var(--color-red-light);
+  --color-error-state: var(--color-red-standard);
+  --color-destructive: var(--color-red-dark);
+
+  /* Green Color Variants - Design System */
+  /* Light: For success backgrounds */
+  --color-green-light: #DCFCE7;
+  /* Standard: For primary branding and success states */
+  --color-green-standard: #22C55E;
+  /* Dark: For emphasis and dark mode accents */
+  --color-green-dark: #15803D;
+
+  /* Success Context Variables */
+  --color-success-background: var(--color-green-light);
+  --color-success-state: var(--color-green-standard);
+  --color-success-emphasis: var(--color-green-dark);
+
   color-scheme: light;
 }
 
@@ -86,6 +112,16 @@
   --overlay-color: rgba(0, 0, 0, 0.5);
   --overlay-light-color: rgba(0, 0, 0, 0.1);
 
+  /* Red Color Variants */
+  --color-red-light: #FECACA;
+  --color-red-standard: #EF4444;
+  --color-red-dark: #7F1D1D;
+
+  /* Green Color Variants */
+  --color-green-light: #DCFCE7;
+  --color-green-standard: #22C55E;
+  --color-green-dark: #15803D;
+
   color-scheme: light;
 }
 
@@ -114,6 +150,16 @@
   --divider-color: #2a2a2a;
   --overlay-color: rgba(255, 255, 255, 0.1);
   --overlay-light-color: rgba(255, 255, 255, 0.05);
+
+  /* Red Color Variants */
+  --color-red-light: #FECACA;
+  --color-red-standard: #EF4444;
+  --color-red-dark: #7F1D1D;
+
+  /* Green Color Variants */
+  --color-green-light: #DCFCE7;
+  --color-green-standard: #22C55E;
+  --color-green-dark: #15803D;
 
   color-scheme: dark;
 }

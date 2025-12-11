@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import ChatWoot from "./components/ChatWoot";
 import ThemeToggle from "./components/ThemeToggle";
+import { ColorPaletteSwitcher } from "./components/ColorPaletteSwitcher";
 
 export default function Home() {
   const [snowflakes, setSnowflakes] = useState<Array<{ id: number; left: number; delay: number; duration: number }>>([]);
@@ -190,6 +191,9 @@ export default function Home() {
 
       {/* Theme Toggle */}
       <ThemeToggle />
+
+      {/* Color Palette Switcher */}
+      <ColorPaletteSwitcher />
 
       {/* ChatWoot Component */}
       <ChatWoot />
