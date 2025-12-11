@@ -77,8 +77,8 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
         setMode(savedMode);
         applyTheme(savedMode);
 
-        // Load background inversion preference
-        const inverted = getThemePreference();
+        // Load background inversion preference (default to false)
+        const inverted = false;
         setBackgroundInverted(inverted);
         applyThemeInversion(inverted);
 
@@ -152,9 +152,6 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       // Update state
       setBackgroundInverted(value);
 
-      // Persist to localStorage
-      setThemePreference(value);
-
       // Apply the filter
       applyThemeInversion(value);
 
@@ -174,9 +171,8 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     } catch (error) {
       console.error('Failed to update theme preference:', error);
       // Rollback on error
-      const previous = getThemePreference();
-      setBackgroundInverted(previous);
-      applyThemeInversion(previous);
+      setBackgroundInverted(!value);
+      applyThemeInversion(!value);
       throw error;
     } finally {
       setIsLoading(false);

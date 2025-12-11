@@ -87,3 +87,19 @@ export function toggleTheme(): 'light' | 'dark' {
   applyTheme(next);
   return next;
 }
+
+/**
+ * Apply background color inversion filter to the document
+ */
+export function applyThemeInversion(inverted: boolean): void {
+  if (typeof document === 'undefined') {
+    return;
+  }
+
+  const root = document.documentElement;
+  if (inverted) {
+    root.style.filter = 'invert(1)';
+  } else {
+    root.style.filter = 'none';
+  }
+}
