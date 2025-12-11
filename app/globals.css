@@ -172,9 +172,9 @@
 }
 
 body {
-  background-color: #FF0000;
+  background-color: var(--bg-background);
   color: var(--text-primary);
-  font-family: 'Comic Sans MS', cursive, sans-serif;
+  font-family: var(--font-sans);
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
