@@ -8,6 +8,9 @@ STEPS:
 3. Create a descriptive commit message based on the integration
 4. Commit the changes: git commit -m "your message"
 5. Push the changes: git push
+6. VERIFY the push succeeded by checking: git status
+   - It should say "Your branch is up to date with 'origin/...'"
+   - If it says "Your branch is ahead", the push FAILED - try again
 
 HANDLING MERGE CONFLICTS:
 If the push fails due to remote changes:
@@ -22,9 +25,12 @@ If the push fails due to remote changes:
 3. Once conflicts are resolved, push again: git push
 4. If pull/rebase fails repeatedly, try: git pull --no-rebase, then push
 
-IMPORTANT:
+CRITICAL REQUIREMENTS:
 - Use a clear commit message that describes the integration (e.g., "feat: integrate Stripe payments")
 - Make sure ALL changes from the integration are included
 - Handle merge conflicts carefully - prefer keeping the integration changes
 - Keep retrying until the push succeeds
+- VERIFY push success with git status before completing
+- Write "PUSH SUCCESS" to the log after verifying the push succeeded
 - If you encounter any git errors, read the error message and follow the suggested fix
+- DO NOT complete this stage until you see "Your branch is up to date with 'origin/...'" in git status
