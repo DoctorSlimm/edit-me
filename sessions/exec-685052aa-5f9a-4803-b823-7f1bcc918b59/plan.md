@@ -1,8 +1,3 @@
-You are implementing an integration plan for a project.
-You don't have access to any external service or storage, don't add them even if the plan specifies them.
-
-## Integration Plan
-
 # 90s-Inspired UI Redesign
 
 A comprehensive plan to transform the entire application with a 90s aesthetic, featuring fully blocking modal popups, retro typography, and period-accurate styling across all UI components.
@@ -121,14 +116,3 @@ Fully blocking modals (no forced close options) render with correct z-index stac
 ## Browser & Accessibility Standards
 
 Chrome, Firefox, and Safari render consistently. Mobile breakpoint at 768px reduces snowflake count and font size. Prefers-reduced-motion respected. Keyboard navigation unaffected (pointer-events: none). No TypeScript errors. All tests pass before deployment.
-
-## Your Task
-
-Follow the plan above step-by-step to implement the integration. The plan has been generated with all necessary context and steps.
-
-IMPORTANT:
-- Follow the plan exactly as written
-- Complete all setup, integration, and verification steps
-- Make all necessary code changes
-- Install any required packages
-- The plan is cached in AI cache for reference

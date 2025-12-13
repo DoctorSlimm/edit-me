@@ -2,9 +2,10 @@
 
 import React, { useState } from 'react';
 import { useTheme } from '@/app/providers/ThemeProvider';
+import { RetroButton } from './RetroButton';
 
 /**
- * ColorPaletteSwitcher Component
+ * ColorPaletteSwitcher Component - 90s Retro Styled
  *
  * Allows users to switch between available color palettes
  * Displays all available color palettes and the currently active one
@@ -31,105 +32,124 @@ export function ColorPaletteSwitcher() {
 
   return (
     <div
+      className="retro-panel"
       style={{
         position: 'fixed',
         bottom: '80px',
         right: '20px',
-        zIndex: 1000,
-        backgroundColor: 'var(--background)',
-        border: '2px solid var(--foreground)',
-        borderRadius: '8px',
-        padding: '16px',
-        maxWidth: '250px',
-        boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+        zIndex: 999,
+        maxWidth: '280px',
+        fontFamily: 'var(--font-90s-sans)',
       }}
     >
-      <div style={{ marginBottom: '12px', fontWeight: 'bold' }}>Color Palettes</div>
-
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-        {colorPalettes.map((palette) => (
-          <button
-            key={palette.id}
-            onClick={() => handlePaletteChange(palette.id)}
-            disabled={colorsLoading}
-            style={{
-              padding: '8px 12px',
-              border:
-                activeColorPalette?.id === palette.id
-                  ? '2px solid var(--color-standard)'
-                  : '1px solid var(--foreground)',
-              backgroundColor:
-                activeColorPalette?.id === palette.id
-                  ? 'rgba(239, 68, 68, 0.1)'
-                  : 'transparent',
-              color: 'var(--foreground)',
-              borderRadius: '4px',
-              cursor: colorsLoading ? 'not-allowed' : 'pointer',
-              opacity: colorsLoading ? 0.6 : 1,
-              textAlign: 'left',
-              fontSize: '14px',
-            }}
-            title={palette.description || ''}
-          >
-            <div style={{ fontWeight: activeColorPalette?.id === palette.id ? 'bold' : 'normal' }}>
-              {palette.name}
-            </div>
-            {palette.variants && (
-              <div
-                style={{
-                  display: 'flex',
-                  gap: '4px',
-                  marginTop: '4px',
-                }}
-              >
-                {palette.variants.slice(0, 3).map((variant) => (
-                  <div
-                    key={variant.id}
-                    style={{
-                      width: '20px',
-                      height: '20px',
-                      backgroundColor: variant.hex_value,
-                      borderRadius: '3px',
-                      border: '1px solid rgba(0, 0, 0, 0.1)',
-                    }}
-                    title={`${variant.name} - ${variant.tonal_level}`}
-                  />
-                ))}
-              </div>
-            )}
-          </button>
-        ))}
+      {/* Title Bar */}
+      <div
+        style={{
+          background: 'linear-gradient(90deg, #000080 0%, #1084d7 100%)',
+          color: 'white',
+          padding: '2px 4px',
+          marginBottom: '0.5rem',
+          fontSize: '11px',
+          fontWeight: 'bold',
+          marginTop: '-4px',
+          marginLeft: '-4px',
+          marginRight: '-4px',
+        }}
+      >
+        Color Palettes
       </div>
 
-      {error && (
-        <div
-          style={{
-            marginTop: '12px',
-            padding: '8px',
-            backgroundColor: 'var(--color-error-state)',
-            color: 'white',
-            borderRadius: '4px',
-            fontSize: '12px',
-            maxHeight: '60px',
-            overflow: 'auto',
-          }}
-        >
-          {error}
+      <div style={{ padding: '8px' }}>
+        {/* Palette Selection Grid */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', marginBottom: '8px' }}>
+          {colorPalettes.map((palette) => (
+            <button
+              key={palette.id}
+              onClick={() => handlePaletteChange(palette.id)}
+              disabled={colorsLoading}
+              style={{
+                padding: '6px 8px',
+                textAlign: 'left',
+                fontSize: '11px',
+                fontFamily: 'var(--font-90s-sans)',
+                fontWeight: activeColorPalette?.id === palette.id ? 'bold' : 'normal',
+                backgroundColor: activeColorPalette?.id === palette.id ? '#0000FF' : 'var(--retro-light-gray)',
+                color: activeColorPalette?.id === palette.id ? 'white' : 'black',
+                border: '2px solid',
+                borderColor: activeColorPalette?.id === palette.id
+                  ? '#0000FF #FFFFFF #FFFFFF #0000FF'
+                  : 'var(--retro-light-gray) var(--retro-black) var(--retro-black) var(--retro-light-gray)',
+                boxShadow: activeColorPalette?.id === palette.id
+                  ? 'inset 1px 1px 0 rgba(255, 255, 255, 0.8), inset -1px -1px 0 rgba(0, 0, 0, 0.8)'
+                  : 'inset 1px 1px 0 rgba(255, 255, 255, 1), inset -1px -1px 0 rgba(128, 128, 128, 1)',
+                cursor: colorsLoading ? 'not-allowed' : 'pointer',
+                opacity: colorsLoading ? 0.6 : 1,
+                transition: 'all 50ms',
+              }}
+              title={palette.description || ''}
+            >
+              <div style={{ marginBottom: palette.variants ? '4px' : '0' }}>
+                🎨 {palette.name}
+              </div>
+              {palette.variants && (
+                <div
+                  style={{
+                    display: 'flex',
+                    gap: '4px',
+                    flexWrap: 'wrap',
+                  }}
+                >
+                  {palette.variants.slice(0, 4).map((variant) => (
+                    <div
+                      key={variant.id}
+                      style={{
+                        width: '16px',
+                        height: '16px',
+                        backgroundColor: variant.hex_value,
+                        border: '1px solid #000000',
+                      }}
+                      title={`${variant.name} - ${variant.hex_value}`}
+                    />
+                  ))}
+                </div>
+              )}
+            </button>
+          ))}
         </div>
-      )}
 
-      {colorsLoading && (
-        <div
-          style={{
-            marginTop: '12px',
-            textAlign: 'center',
-            fontSize: '12px',
-            color: 'var(--foreground)',
-          }}
-        >
-          Loading...
-        </div>
-      )}
+        {/* Error Message */}
+        {error && (
+          <div
+            className="retro-panel sunken"
+            style={{
+              marginTop: '8px',
+              marginBottom: '0',
+              padding: '4px',
+              backgroundColor: '#FFE7E7',
+              fontSize: '10px',
+              color: '#EF4444',
+              fontWeight: 'bold',
+            }}
+          >
+            ⚠️ {error}
+          </div>
+        )}
+
+        {/* Loading State */}
+        {colorsLoading && (
+          <div
+            style={{
+              marginTop: '8px',
+              textAlign: 'center',
+              fontSize: '10px',
+              color: '#666666',
+              fontStyle: 'italic',
+            }}
+          >
+            ⏳ Loading...
+          </div>
+        )}
+      </div>
     </div>
   );
 }

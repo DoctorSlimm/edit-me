@@ -1,10 +1,13 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import { RetroButton } from './RetroButton';
+import { useShowPopup } from '@/lib/stores/popupStore';
 
 export default function Counter() {
   const [counter, setCounter] = useState<number>(0);
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
+  const showPopup = useShowPopup();
 
   // Initialize counter from localStorage on component mount
   useEffect(() => {
@@ -24,60 +27,107 @@ export default function Counter() {
 
   // Increment handler
   const handleIncrement = useCallback(() => {
-    setCounter(prev => prev + 1);
-  }, []);
+    const newValue = counter + 1;
+    setCounter(newValue);
+    if (newValue % 10 === 0) {
+      showPopup(
+        '🎉 Milestone!',
+        `You've reached a count of ${newValue}!`,
+        { dismissTimeout: 3000 }
+      );
+    }
+  }, [counter, showPopup]);
 
   // Decrement handler
   const handleDecrement = useCallback(() => {
-    setCounter(prev => prev - 1);
+    setCounter(prev => Math.max(0, prev - 1));
   }, []);
 
   // Reset handler
   const handleReset = useCallback(() => {
+    showPopup(
+      '⚠️ Confirmation',
+      'Are you sure you want to reset the counter?',
+      {
+        dismissTimeout: 5000,
+        closeButton: 'force-dismiss',
+      }
+    );
     setCounter(0);
     localStorage.removeItem('counterValue');
-  }, []);
+  }, [showPopup]);
 
   return (
-    <div className="bg-blue-600 border-4 border-blue-700 p-8 max-w-md w-full mb-8 shadow-lg">
-      <h2 className="text-3xl text-white text-center mb-6 font-bold underline">
-        🔢 COUNTER APP 🔢
-      </h2>
+    <div className="retro-panel" style={{ width: '100%', maxWidth: '500px', marginBottom: '2rem' }}>
+      {/* Title Bar */}
+      <div
+        style={{
+          background: 'linear-gradient(90deg, #000080 0%, #1084d7 100%)',
+          color: 'white',
+          padding: '2px 4px',
+          marginBottom: '0.5rem',
+          fontSize: '12px',
+          fontWeight: 'bold',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        }}
+      >
+        <span>🔢 COUNTER.EXE</span>
+        <span style={{ fontSize: '10px' }}>v1.0</span>
+      </div>
 
-      <div className="bg-blue-700 border-2 border-blue-400 p-8 rounded text-center mb-6">
-        <div className="text-6xl font-bold text-yellow-300 mb-4">
+      {/* Counter Display */}
+      <div style={{ padding: '1rem', backgroundColor: '#c0c0c0', textAlign: 'center', marginBottom: '1rem' }}>
+        <div
+          style={{
+            fontSize: '3rem',
+            fontWeight: 'bold',
+            color: '#EF4444',
+            marginBottom: '0.5rem',
+            fontFamily: 'var(--font-90s-mono)',
+            border: '2px solid',
+            borderColor: '#000080 #FFFFFF #FFFFFF #000080',
+            padding: '1rem',
+            backgroundColor: '#FFFFFF',
+          }}
+        >
           {counter}
         </div>
-        <p className="text-blue-100 text-sm">Current Count</p>
+        <p style={{ fontSize: '12px', color: '#000080', margin: '0' }}>
+          ← Current Count →
+        </p>
       </div>
 
-      <div className="flex flex-col gap-4">
-        <div className="flex gap-4">
-          <button
-            onClick={handleDecrement}
-            className="flex-1 bg-red-600 hover:bg-red-700 border-2 border-red-800 p-4 text-white font-bold text-xl transition-colors cursor-pointer"
-          >
-            ➖ Decrement
-          </button>
-
-          <button
-            onClick={handleIncrement}
-            className="flex-1 bg-green-600 hover:bg-green-700 border-2 border-green-800 p-4 text-white font-bold text-xl transition-colors cursor-pointer"
-          >
-            ➕ Increment
-          </button>
-        </div>
-
-        <button
-          onClick={handleReset}
-          className="w-full bg-yellow-500 hover:bg-yellow-600 border-2 border-yellow-700 p-3 text-black font-bold text-lg transition-colors cursor-pointer"
+      {/* Button Grid */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem', marginBottom: '0.5rem' }}>
+        <RetroButton
+          variant="danger"
+          onClick={handleDecrement}
+          style={{ width: '100%' }}
         >
-          🔄 Reset
-        </button>
+          ➖ Decrement
+        </RetroButton>
+
+        <RetroButton
+          variant="success"
+          onClick={handleIncrement}
+          style={{ width: '100%' }}
+        >
+          ➕ Increment
+        </RetroButton>
       </div>
 
-      <p className="text-blue-100 text-xs text-center mt-6">
-        💾 State persists in browser localStorage
+      <RetroButton
+        variant="primary"
+        onClick={handleReset}
+        style={{ width: '100%', marginBottom: '0.5rem' }}
+      >
+        🔄 Reset
+      </RetroButton>
+
+      <p style={{ fontSize: '10px', color: '#666666', textAlign: 'center', margin: '0.5rem 0 0 0' }}>
+        💾 Saved in browser storage
       </p>
     </div>
   );

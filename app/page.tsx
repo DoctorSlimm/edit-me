@@ -8,6 +8,7 @@ import VisitorCounter from "./components/VisitorCounter";
 import ServerVisitorCounter from "./components/ServerVisitorCounter";
 import SnowflakeContainer from "./components/SnowflakeContainer";
 import Counter from "./components/Counter";
+import { ModalTestPanel } from "./components/ModalTestPanel";
 
 // Feature flag for snowflake effect - can be toggled via environment variable or configuration
 const SNOWFLAKE_FEATURE_ENABLED = true;
@@ -50,8 +51,12 @@ export default function Home() {
 
         {/* Original Visitor Counter Component */}
         <VisitorCounter />
-        {/* Counter Component */}
+
+        {/* Counter Component - 90s Styled */}
         <Counter />
+
+        {/* Modal Test Panel - 90s Styled */}
+        <ModalTestPanel />
 
         {/* Server-Side Visitor Counter Component */}
         <ServerVisitorCounter />

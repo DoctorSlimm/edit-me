@@ -2,9 +2,11 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
+import "./styles/retro-90s.css";
 import Script from "next/script";
 import { ThemeProvider } from "./providers/ThemeProvider";
 import { AuthProvider } from "./providers/AuthProvider";
+import { PopupProvider } from "./providers/PopupProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -45,7 +47,9 @@ export default function RootLayout({
       >
         <AuthProvider>
           <ThemeProvider>
-            {children}
+            <PopupProvider>
+              {children}
+            </PopupProvider>
           </ThemeProvider>
         </AuthProvider>
       </body>
