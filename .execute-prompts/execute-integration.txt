@@ -5,11 +5,11 @@ You don't have access to any external service or storage, don't add them even if
 
 # Integration Plan
 
-{"answers":[{"answer":"A new marketing/landing page for a San Francisco-based company","question":"W
+{"answers":[{"answer":"Forestry/timber management system with inventory tracking","question":"What is the primary use case and business objective for the 'add more trees' feature? Is this for a forest management system, urban planning tool, environmental tracking platform, or something else?"},{"answer":"SQL-based (PostgreSQL/MySQL) with REST APIs","question":"What is your current tech stack and database approach for this application?"},{"answer":"Under 10,000 records with modest growth (500-1,000 records per month)","question":"What is your expected database size and growth rate?"}]}
 
 ## Implementation Plan
 
-{"answers":[{"answer":"A new marketing/landing page for a San Francisco-based company","question":"What is the primary application or website where 'San Francisco' references and memes should be integrated?"},{"answer":"Use a third-party meme API (like Giphy/Imgflip) that we query dynamically","question":"How should the 'techbro memes' be sourced and managed?"},{"answer":"Low traffic MVP (under 1K daily users) - deploy within 1-2 weeks","question":"What is the target deployment timeline and expe
+{"answers":[{"answer":"Forestry/timber management system with inventory tracking","question":"What is the primary use case and business objective for the 'add more trees' feature? Is this for a forest management system, urban planning tool, environmental tracking platform, or something else?"},{"answer":"SQL-based (PostgreSQL/MySQL) with REST APIs","question":"What is your current tech stack and database approach for this application?"},{"answer":"Under 10,000 records with modest growth (500-1,000 records per month)","question":"What is your expected database size and growth rate?"}]}
 
 ## Your Task
 

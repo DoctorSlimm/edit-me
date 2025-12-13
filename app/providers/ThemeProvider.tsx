@@ -56,7 +56,19 @@ interface ThemeContextType {
   colorsLoading: boolean;
 }
 
-const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
+const defaultThemeContext: ThemeContextType = {
+  mode: 'light',
+  toggleTheme: async () => {},
+  backgroundInverted: false,
+  toggleBackgroundInversion: async () => {},
+  colorPalettes: [],
+  activeColorPalette: null,
+  setActiveColorPalette: async () => {},
+  isLoading: true,
+  colorsLoading: false,
+};
+
+const ThemeContext = createContext<ThemeContextType>(defaultThemeContext);
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   // Theme mode state
@@ -72,9 +84,13 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   // Loading states
   const [isLoading, setIsLoading] = useState(true);
   const [colorsLoading, setColorsLoading] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
 
   // Initialize theme on mount
   useEffect(() => {
+    // Mark as mounted on client-side only
+    setIsMounted(true);
+
     const initializeTheme = async () => {
       try {
         setIsLoading(true);
@@ -235,6 +251,11 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  // Only render providers on client-side to avoid hydration issues during static generation
+  if (!isMounted) {
+    return <>{children}</>;
+  }
+
   return (
     <ThemeContext.Provider
       value={{
@@ -256,8 +277,5 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
 export function useTheme() {
   const context = useContext(ThemeContext);
-  if (context === undefined) {
-    throw new Error('useTheme must be used within a ThemeProvider');
-  }
   return context;
 }

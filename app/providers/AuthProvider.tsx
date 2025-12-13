@@ -3,23 +3,38 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { User, AuthContextType, RegisterRequest } from '@/lib/auth/types';
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+const AUTH_TOKEN_KEY = 'auth:accessToken';
+const REFRESH_TOKEN_KEY = 'auth:refreshToken';
+
+const defaultAuthContext: AuthContextType = {
+  user: null,
+  isLoading: true,
+  isAuthenticated: false,
+  accessToken: null,
+  login: async () => {},
+  register: async () => {},
+  logout: async () => {},
+  refreshToken: async () => {},
+};
+
+const AuthContext = createContext<AuthContextType>(defaultAuthContext);
 
 interface AuthProviderProps {
   children: ReactNode;
 }
-
-const AUTH_TOKEN_KEY = 'auth:accessToken';
-const REFRESH_TOKEN_KEY = 'auth:refreshToken';
 
 export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<User | null>(null);
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
 
   // Initialize auth state on mount
   useEffect(() => {
+    // Mark as mounted on client-side only
+    setIsMounted(true);
+
     const initializeAuth = async () => {
       try {
         // Check for existing session
@@ -217,6 +232,11 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
   };
 
+  // Only render auth context on client-side to avoid hydration issues during static generation
+  if (!isMounted) {
+    return <>{children}</>;
+  }
+
   const value: AuthContextType = {
     user,
     isLoading,
@@ -237,8 +257,5 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
 export function useAuth() {
   const context = useContext(AuthContext);
-  if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
   return context;
 }
