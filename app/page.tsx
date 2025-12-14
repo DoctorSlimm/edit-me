@@ -31,7 +31,7 @@ export default function Home() {
         <div className="mb-8 w-full max-w-2xl">
           <div className="bg-gradient-to-r from-red-500 via-red-400 to-red-500 border-4 border-red-700 p-6 rounded-lg shadow-2xl animate-pulse">
             <div className="text-center">
-              <p className="text-4xl font-bold text-white mb-2">✨ RED INITIATIVE ✨</p>
+              <p className="text-4xl font-bold text-white mb-2">✨ HAPPY HOLIDAYS ✨</p>
               <p className="text-lg text-red-50 font-semibold">Celebrating Holiday Excellence & Festive Cheer</p>
             </div>
           </div>
@@ -64,13 +64,13 @@ export default function Home() {
         {/* RED FEATURE BOX - ENHANCED */}
         <div className="bg-red-600 border-4 border-red-700 p-6 max-w-2xl w-full mb-8 shadow-lg">
           <h2 className="text-3xl text-white text-center mb-4 font-bold underline">
-            🎅 RED STATUS INDICATOR 🎅
+            🎅 HAPPY HOLIDAYS STATUS INDICATOR 🎅
           </h2>
           <div className="bg-red-700 border-2 border-red-400 p-4 rounded text-center">
             <div className="flex justify-center mb-3">
               <div className="w-6 h-6 bg-red-400 rounded-full animate-pulse"></div>
             </div>
-            <p className="text-white font-bold text-lg">✓ System Operating at Peak Red Efficiency</p>
+            <p className="text-white font-bold text-lg">✓ System Operating at Peak Holiday Efficiency</p>
             <p className="text-red-100 text-sm mt-2">Holiday Mode: ENABLED</p>
           </div>
         </div>
@@ -129,7 +129,7 @@ export default function Home() {
         <div className="w-full max-w-2xl mb-8">
           <div className="bg-gradient-to-r from-red-500 to-red-600 border-4 border-red-700 p-4 rounded-lg">
             <p className="text-white text-center font-bold text-lg">
-              🔴 Red Holiday Spirit Powers This Experience 🔴
+              🔴 Happy Holidays Spirit Powers This Experience 🔴
             </p>
             <p className="text-red-50 text-center text-sm mt-2">
               Built with festive enthusiasm and holiday-conscious design
