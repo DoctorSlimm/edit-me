@@ -1,8 +1,3 @@
-You are implementing an integration plan for a project.
-You don't have access to any external service or storage, don't add them even if the plan specifies them.
-
-## Integration Plan
-
 # Halloween Theme Implementation
 
 This plan outlines the implementation of an automatic Halloween theme for an application, transforming the entire UI with seasonal colors, imagery, and fonts during October, and reverting to the default theme on November 1st.
@@ -103,14 +98,3 @@ The goal is to apply an automatic Halloween theme to the entire application from
 - Client-side date check in ThemeProvider automatically activates October 1st, deactivates November 1st.
 - Manual override enables pre-October testing.
 - Rollback requires only commenting date detection logic; no database migration needed.
-
-## Your Task
-
-Follow the plan above step-by-step to implement the integration. The plan has been generated with all necessary context and steps.
-
-IMPORTANT:
-- Follow the plan exactly as written
-- Complete all setup, integration, and verification steps
-- Make all necessary code changes
-- Install any required packages
-- The plan is cached in AI cache for reference

@@ -14,6 +14,11 @@ import {
   fetchColorPalette,
   applyColorVariantsToDOM,
 } from '@/lib/color-utils';
+import {
+  isHalloweenSeason,
+  getHalloweenActiveStatus,
+  setHalloweenActiveStatus,
+} from '@/lib/halloween-utils';
 
 interface ColorVariant {
   id: number;
@@ -51,6 +56,9 @@ interface ThemeContextType {
   activeColorPalette: ColorPalette | null;
   setActiveColorPalette: (paletteId: number) => Promise<void>;
 
+  // Halloween theme
+  halloweenActive: boolean;
+
   // Loading state
   isLoading: boolean;
   colorsLoading: boolean;
@@ -64,6 +72,7 @@ const defaultThemeContext: ThemeContextType = {
   colorPalettes: [],
   activeColorPalette: null,
   setActiveColorPalette: async () => {},
+  halloweenActive: false,
   isLoading: true,
   colorsLoading: false,
 };
@@ -80,6 +89,9 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   // Color theming state
   const [colorPalettes, setColorPalettes] = useState<ColorPalette[]>([]);
   const [activeColorPalette, setActiveColorPaletteState] = useState<ColorPalette | null>(null);
+
+  // Halloween theme state
+  const [halloweenActive, setHalloweenActive] = useState(false);
 
   // Loading states
   const [isLoading, setIsLoading] = useState(true);
@@ -110,8 +122,26 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
         const palettes = await fetchColorPalettes();
         setColorPalettes(palettes);
 
-        // Load default palette (red variants)
-        if (palettes.length > 0) {
+        // Check if Halloween theme should be active
+        const isHalloween = isHalloweenSeason();
+        setHalloweenActive(isHalloween);
+        setHalloweenActiveStatus(isHalloween);
+
+        // Apply Halloween palette if active, otherwise load default palette
+        if (isHalloween && palettes.length >= 3) {
+          // Palette ID 3 is the Halloween palette
+          const halloweenPalette = palettes.find((p) => p.id === 3);
+          if (halloweenPalette) {
+            setActiveColorPaletteState(halloweenPalette);
+            applyColorVariantsToDOM(halloweenPalette);
+          } else {
+            // Fallback to default if Halloween palette not found
+            const defaultPalette = palettes[0];
+            setActiveColorPaletteState(defaultPalette);
+            applyColorVariantsToDOM(defaultPalette);
+          }
+        } else if (palettes.length > 0) {
+          // Load default palette (red variants) when not in Halloween season
           const defaultPalette = palettes[0];
           setActiveColorPaletteState(defaultPalette);
           applyColorVariantsToDOM(defaultPalette);
@@ -125,6 +155,24 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     };
 
     initializeTheme();
+
+    // Set up interval to check for date changes (for Halloween transitions)
+    const dateCheckInterval = setInterval(() => {
+      const currentHalloweenStatus = isHalloweenSeason();
+      setHalloweenActive((prevStatus) => {
+        if (prevStatus !== currentHalloweenStatus) {
+          // Date has crossed into/out of Halloween season, might need to refresh
+          console.log(
+            currentHalloweenStatus
+              ? 'Entering Halloween season'
+              : 'Exiting Halloween season'
+          );
+        }
+        return currentHalloweenStatus;
+      });
+    }, 60000); // Check every minute
+
+    return () => clearInterval(dateCheckInterval);
   }, []);
 
   const toggleTheme = async () => {
@@ -266,6 +314,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
         colorPalettes,
         activeColorPalette,
         setActiveColorPalette,
+        halloweenActive,
         isLoading,
         colorsLoading,
       }}
