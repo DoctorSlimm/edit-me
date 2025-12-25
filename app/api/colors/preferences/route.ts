@@ -1,12 +1,12 @@
 /**
  * GET /api/colors/preferences
- * Retrieve user's color preferences
+ * Retrieve user's color preferences (from in-memory storage, session-only)
  *
  * Success Response: 200
  * UserColorPreferences
  *
  * PUT /api/colors/preferences
- * Update user's color preferences
+ * Update user's color preferences (stored in memory, session-only, no database access)
  *
  * Request Body:
  * {
@@ -17,24 +17,59 @@
  *
  * Success Response: 200
  * UserColorPreferences
+ *
+ * Error Responses:
+ * - 400: Invalid field types or no fields provided
+ * - 500: Failed to update storage
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { getUserColorPreferences, updateUserColorPreferences } from '@/lib/db';
 
 // For demo purposes: use a generic user ID
 // In production, this would be retrieved from session/auth
 const USER_ID = 'demo-user';
 
+/**
+ * In-memory storage for user color preferences (session-only, cleared on server restart)
+ * Key: userId, Value: UserColorPreferences object
+ */
+const colorPreferencesStore = new Map<string, any>();
+
+/**
+ * User color preferences interface
+ */
+interface UserColorPreferences {
+  user_id: string;
+  preferred_palette_id?: number;
+  theme_settings: Record<string, unknown>;
+  background_inverted: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+/**
+ * Initialize default preferences for a user
+ */
+function getDefaultPreferences(userId: string): UserColorPreferences {
+  return {
+    user_id: userId,
+    preferred_palette_id: 1,
+    theme_settings: {},
+    background_inverted: false,
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+  };
+}
+
 export async function GET(request: NextRequest) {
   try {
-    const preferences = await getUserColorPreferences(USER_ID);
+    // Retrieve preferences from in-memory store
+    let preferences = colorPreferencesStore.get(USER_ID);
 
     if (!preferences) {
-      return NextResponse.json(
-        { error: 'Failed to retrieve user preferences' },
-        { status: 500 }
-      );
+      // Return default preferences if not yet set
+      preferences = getDefaultPreferences(USER_ID);
+      colorPreferencesStore.set(USER_ID, preferences);
     }
 
     return NextResponse.json(preferences, { status: 200 });
@@ -52,7 +87,7 @@ export async function PUT(request: NextRequest) {
     const body = await request.json();
     const { preferred_palette_id, theme_settings, background_inverted } = body;
 
-    // Validate input
+    // Validate input - check field types
     if (preferred_palette_id !== undefined && typeof preferred_palette_id !== 'number') {
       return NextResponse.json(
         { error: 'preferred_palette_id must be a number' },
@@ -74,6 +109,7 @@ export async function PUT(request: NextRequest) {
       );
     }
 
+    // Build updates object
     const updates: Record<string, unknown> = {};
 
     if (preferred_palette_id !== undefined) {
@@ -88,6 +124,7 @@ export async function PUT(request: NextRequest) {
       updates.background_inverted = background_inverted;
     }
 
+    // Ensure at least one field was provided
     if (Object.keys(updates).length === 0) {
       return NextResponse.json(
         { error: 'No valid fields provided for update' },
@@ -95,16 +132,32 @@ export async function PUT(request: NextRequest) {
       );
     }
 
-    const preferences = await updateUserColorPreferences(USER_ID, updates);
+    try {
+      // Get current preferences or initialize
+      let preferences = colorPreferencesStore.get(USER_ID);
+      if (!preferences) {
+        preferences = getDefaultPreferences(USER_ID);
+      }
 
-    if (!preferences) {
+      // Apply updates
+      const updatedPreferences: UserColorPreferences = {
+        ...preferences,
+        ...updates,
+        user_id: USER_ID,
+        updated_at: new Date().toISOString(),
+      };
+
+      // Store in memory
+      colorPreferencesStore.set(USER_ID, updatedPreferences);
+
+      return NextResponse.json(updatedPreferences, { status: 200 });
+    } catch (storageError) {
+      console.error('Failed to update storage:', storageError);
       return NextResponse.json(
         { error: 'Failed to update user preferences' },
         { status: 500 }
       );
     }
-
-    return NextResponse.json(preferences, { status: 200 });
   } catch (error) {
     console.error('Failed to update user color preferences:', error);
     return NextResponse.json(

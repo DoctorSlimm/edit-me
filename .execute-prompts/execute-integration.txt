@@ -3,106 +3,109 @@ You don't have access to any external service or storage, don't add them even if
 
 ## Integration Plan
 
-# Halloween Theme Implementation
+# Color Picker Preferences Implementation
 
-This plan outlines the implementation of an automatic Halloween theme for an application, transforming the entire UI with seasonal colors, imagery, and fonts during October, and reverting to the default theme on November 1st.
+This plan outlines the implementation of a color picker preferences feature using local storage for session-only persistence, addressing API errors, and ensuring synchronization across browser tabs.
 
 ## Implementation Plan
 
-# Halloween Theme Implementation Plan
+# Overview & Problem Statement
 
-## Executive Summary
+The PUT `/api/colors/preferences` endpoint fails with HTTP 500 errors because `updateUserColorPreferences()` attempts database access, which is unavailable in the sandbox environment. The solution: store color preferences in browser local storage and use the API only for validation and tab synchronization.
 
-The goal is to apply an automatic Halloween theme to the entire application from October 1st to 31st, reverting to the default theme on November 1st. This involves updating colors (orange, purple, black), imagery (pumpkins, ghosts, spiders), and fonts globally across all pages via system date detection.
+Color preferences persist for the current browser session only, clearing on page close. Users store one active palette preference. The API validates incoming color values (`preferred_palette_id` as number, `theme_settings` as object, `background_inverted` as boolean) and broadcasts changes across browser tabs.
 
-### Scope & Deliverables
+# Requirements & Constraints
 
-- **Automatic Triggering**: The theme activates on October 1st and disables on November 1st via server-side date logic.
-- **Global Visual Transformation**: Colors, Halloween imagery, and seasonal fonts are applied to all pages without user configuration.
-- **Existing ThemeProvider**: Extends the current React/Next.js ThemeProvider context with a seasonal variant loaded conditionally based on the system date.
-- **Tailwind CSS Integration**: Leverages existing Tailwind CSS styling with component-level prop overrides.
-- **Small-Scale Deployment**: Targets an internal app with under 1,000 users on existing infrastructure with minimal performance impact.
+Color preference updates fail with HTTP 500 errors due to unavailable backend database access in the sandboxed environment. Persistence occurs entirely in browser local storage.
 
-## Requirements and Objectives
+**Functional:** Color preferences persist only within the current browser session and clear on close. User selects one active color preference. API endpoint validates input (`preferred_palette_id` number, `theme_settings` object, `background_inverted` boolean) and returns HTTP 400 for invalid requests.
 
-### Functional Requirements
+**Non-Functional:** No external database access permitted. API calls are made for state synchronization across tabs but are non-blocking—failures do not prevent UI updates. Local storage is the only persistence mechanism.
 
-- Halloween theme activates automatically on October 1st and deactivates on November 1st.
-- Full UI transformation: colors, imagery, and fonts across all pages.
-- Extends existing ThemeProvider; reuses `applyColorVariantsToDOM()` and color palette infrastructure.
-- Targets internal deployment (under 1,000 users) on existing Next.js/React stack with Tailwind/CSS-in-JS.
-- Persists changes via localStorage.
+# API Specification
 
-### Non-Functional Requirements
+## PUT /api/colors/preferences
 
-- Theme switch completes within 100ms.
-- Application memory footprint remains unchanged.
-- Additional CSS under 50KB.
-- Uses existing Next.js 16.0.8 build pipeline.
-- Halloween colors maintain WCAG 2.1 AA contrast ratios.
+Validates color preferences and syncs state across tabs using browser local storage only.
 
-## Design and Architecture
+### Request Body
+```json
+{
+  "preferred_palette_id": number,
+  "theme_settings": object,
+  "background_inverted": boolean
+}
+```
+At least one field required. All fields optional.
 
-### System Overview
+### Success Response (200)
+```json
+{
+  "user_id": string,
+  "preferred_palette_id": number,
+  "theme_settings": object,
+  "background_inverted": boolean,
+  "updated_at": string
+}
+```
 
-- Halloween theme applies globally via existing ThemeProvider during October.
-- Client-side JavaScript detects the month and activates the Halloween palette; no backend changes required.
-- Color transformation uses `applyColorVariantsToDOM()` to set CSS custom properties on the document root.
+### Error Responses
+- **400**: Invalid field type or no fields provided. Response includes specific field that failed validation.
+- **500**: Local storage update failed.
 
-### Component Integration
+### Validation
+- `preferred_palette_id` must be a number
+- `theme_settings` must be an object
+- `background_inverted` must be a boolean
+- Clears on browser close (session-only, no persistence)
 
-- ThemeProvider context manages color palettes through the ColorPalette interface.
-- New Halloween palette integrates as a fourth palette option alongside existing variants.
-- `setActiveColorPalette()` applies the selected palette's color variants to the DOM, persisting preference to `/api/colors/preferences`.
+# Data Structures & Storage Schema
 
-## Technical Implementation Details
+## Local Storage
 
-- Add `halloweenActive` boolean to `ThemeContextType` in ThemeProvider.
-- Implement `useEffect` hook that checks `new Date().getMonth()` on initialization and monitors date changes—auto-activate Halloween mode October 1-31, revert November 1st.
-- Store computed state in localStorage under `halloween:auto-active` key.
-- Create Halloween color palette in the database with orange, purple, black, and green variants mapped to existing CSS variables.
-- Use existing `applyColorVariantsToDOM()` from `color-utils.ts` to apply the palette to the document root.
+Color preferences store in browser localStorage under key `user:colors:preferred_palette_id` with value as numeric palette ID (string). Session scope: localStorage clears on browser close.
 
-## Integration and Dependencies
+API endpoint `PUT /api/colors/preferences` validates incoming data: `preferred_palette_id` (number), `theme_settings` (object), `background_inverted` (boolean). Invalid types return HTTP 400. Server-side code checks `typeof window === 'undefined'` to prevent errors during SSR.
 
-- Halloween palette integrates via existing ThemeProvider context and color system.
-- Client-side `setActiveColorPalette()` applies palette variants to DOM as CSS variables.
-- `GET /api/colors/palettes` retrieves palettes; `PUT /api/colors/preferences` persists user selection.
-- Theme mode and palette preference persist in localStorage with API fallback during downtime.
+## User Color Preferences Object
 
-## Constraints, Edge Cases, and Failure Modes
+- `preferred_palette_id`: number (palette ID 1-3: red/green/halloween)
+- `theme_settings`: object (reserved; empty for current implementation)
+- `background_inverted`: boolean (stored separately under `user:theme:background-inverted`)
 
-- Browser timezone determines October detection—users see theme changes at different UTC times.
-- Midnight transitions require page reload if user stays in app past October 31st 11:59 PM.
-- October DST transitions handled by browser Date object automatically.
-- localStorage corruption falls back to default light mode; failed writes continue with in-memory state.
+Single preference at a time. No multi-preference support.
 
-## Testing, Validation, and Measurement
+## Color Palette Cache
 
-### Unit Tests
+Color palettes cached in memory as `Map<number, ColorPalette>` with variants array per palette. No duplicate API queries in same session.
 
-- Test date boundary conditions: October 1 activates Halloween palette, September 30 and November 1 do not.
-- Validate `getColorVariant()` retrieves Halloween hex values correctly.
-- Verify Halloween palette persists in localStorage across page reloads.
+# Component Architecture & Interaction
 
-### Integration Tests
+ColorPaletteSwitcher triggers ThemeProvider.setActiveColorPalette(), which applies the palette to the DOM via applyColorVariantsToDOM() by setting CSS variables on the document root, then sends a PUT request to /api/colors/preferences with the palette_id. The API validates the palette_id and returns the updated preference object; if the API call fails, the client state remains applied on the DOM.
 
-- Verify Halloween theme applies across all DOM elements via `applyColorVariantsToDOM()` without breaking existing light/dark mode toggle.
-- Test theme switches correctly at October 1 and November 1 via system clock simulation.
+**Data Flow:** User clicks palette button → setActiveColorPalette(paletteId) → applyColorVariantsToDOM() updates CSS variables → fetch PUT /api/colors/preferences { preferred_palette_id: paletteId }. The API response validates and returns the stored preference, enabling state synchronization across multiple tabs.
 
-## Timeline, Resources, and Dependencies
+**Storage:** Client state in ThemeProvider holds the active palette. Preferences persist only during the browser session (cleared on browser close). The API endpoint stores preferences in memory and validates all inputs; no database is used.
 
-### Implementation & Deployment
+# Error Handling & Edge Cases
 
-- One developer implements the feature in 2 weeks using React/Next.js with Tailwind CSS.
-- Week 1 covers theme system setup and date detection logic; Week 2 handles component styling updates and testing.
-- Deploy September 30th; go-live October 1st when automatic activation triggers.
+HTTP 500 responses from PUT /api/colors/preferences do not prevent UI state changes. The component updates DOM and state immediately, then attempts API sync asynchronously. API failures log warnings; failed requests are not retried.
 
-### Activation & Rollback
+Input validation at the API layer type-checks `preferred_palette_id` (number), `theme_settings` (object), and `background_inverted` (boolean), returning HTTP 400 for invalid types. Requests with no valid fields return HTTP 400. Hex colors validate against regex `^#[0-9A-Fa-f]{6}$`. Invalid palette IDs cause component to throw error without updating state.
 
-- Client-side date check in ThemeProvider automatically activates October 1st, deactivates November 1st.
-- Manual override enables pre-October testing.
-- Rollback requires only commenting date detection logic; no database migration needed.
+Local storage quota exhaustion logs a warning and silently fails—state continues in memory but persistence is lost on page reload. Browser session close automatically deletes all stored preferences. Non-existent palette IDs during initialization fall back to the first available palette.
+
+# Testing & Validation Strategy
+
+## Unit Tests
+Test `ColorPaletteSwitcher.tsx` renders selected palette with bold font weight and blue background. Verify clicking palette calls `setActiveColorPalette` handler. Test `PUT /api/colors/preferences` rejects invalid `preferred_palette_id` (non-number), `theme_settings` (non-object), and `background_inverted` (non-boolean) with HTTP 400. Verify HTTP 200 returns updated preferences.
+
+## Storage & Sync
+Test `ThemeProvider` persists palette selection to localStorage across page refreshes within the same session. Verify localStorage clears on browser close. Verify API call fails without breaking local state update. Test multiple tabs see palette changes via storage event listeners.
+
+## Error Handling
+Verify error displays in red panel when API returns HTTP 500. Verify component continues functioning when API sync fails (state updated locally). Verify error clears on retry. Confirm `console.warn` logs API failures without throwing.
 
 ## Your Task
 

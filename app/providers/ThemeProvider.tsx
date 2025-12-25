@@ -127,24 +127,39 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
         setHalloweenActive(isHalloween);
         setHalloweenActiveStatus(isHalloween);
 
-        // Apply Halloween palette if active, otherwise load default palette
-        if (isHalloween && palettes.length >= 3) {
-          // Palette ID 3 is the Halloween palette
-          const halloweenPalette = palettes.find((p) => p.id === 3);
-          if (halloweenPalette) {
-            setActiveColorPaletteState(halloweenPalette);
-            applyColorVariantsToDOM(halloweenPalette);
-          } else {
-            // Fallback to default if Halloween palette not found
-            const defaultPalette = palettes[0];
-            setActiveColorPaletteState(defaultPalette);
-            applyColorVariantsToDOM(defaultPalette);
+        // Load color preference from localStorage or apply default/Halloween palette
+        let activePaletteId: number | null = null;
+
+        if (typeof window !== 'undefined') {
+          const savedPaletteId = localStorage.getItem('user:colors:preferred_palette_id');
+          if (savedPaletteId) {
+            activePaletteId = parseInt(savedPaletteId, 10);
           }
-        } else if (palettes.length > 0) {
-          // Load default palette (red variants) when not in Halloween season
-          const defaultPalette = palettes[0];
-          setActiveColorPaletteState(defaultPalette);
-          applyColorVariantsToDOM(defaultPalette);
+        }
+
+        // Determine which palette to use
+        let paletteToApply: ColorPalette | null = null;
+
+        if (activePaletteId) {
+          // Use saved preference if valid
+          const found = palettes.find((p) => p.id === activePaletteId);
+          paletteToApply = found || null;
+        }
+
+        if (!paletteToApply && isHalloween && palettes.length >= 3) {
+          // Apply Halloween palette if it's October and no saved preference
+          const found = palettes.find((p) => p.id === 3);
+          paletteToApply = found || null;
+        }
+
+        if (!paletteToApply && palettes.length > 0) {
+          // Fallback to default palette (red variants)
+          paletteToApply = palettes[0];
+        }
+
+        if (paletteToApply) {
+          setActiveColorPaletteState(paletteToApply);
+          applyColorVariantsToDOM(paletteToApply);
         }
       } catch (error) {
         console.error('Failed to initialize theme:', error);
@@ -155,6 +170,22 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     };
 
     initializeTheme();
+
+    // Set up storage event listener for cross-tab synchronization
+    const handleStorageChange = (event: StorageEvent) => {
+      if (event.key === 'user:colors:preferred_palette_id' && event.newValue) {
+        const paletteId = parseInt(event.newValue, 10);
+        const palette = colorPalettes.find((p) => p.id === paletteId);
+        if (palette) {
+          applyColorVariantsToDOM(palette);
+          setActiveColorPaletteState(palette);
+        }
+      }
+    };
+
+    if (typeof window !== 'undefined') {
+      window.addEventListener('storage', handleStorageChange);
+    }
 
     // Set up interval to check for date changes (for Halloween transitions)
     const dateCheckInterval = setInterval(() => {
@@ -172,7 +203,12 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       });
     }, 60000); // Check every minute
 
-    return () => clearInterval(dateCheckInterval);
+    return () => {
+      clearInterval(dateCheckInterval);
+      if (typeof window !== 'undefined') {
+        window.removeEventListener('storage', handleStorageChange);
+      }
+    };
   }, []);
 
   const toggleTheme = async () => {
@@ -272,11 +308,21 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
         throw new Error(`Palette with ID ${paletteId} not found`);
       }
 
-      // Apply to DOM
+      // Apply to DOM immediately
       applyColorVariantsToDOM(palette);
       setActiveColorPaletteState(palette);
 
-      // Persist to API
+      // Persist to localStorage for client-side session storage
+      if (typeof window !== 'undefined') {
+        try {
+          localStorage.setItem('user:colors:preferred_palette_id', paletteId.toString());
+        } catch (storageError) {
+          console.warn('Failed to persist color preference to localStorage:', storageError);
+          // Continue anyway - DOM is already updated
+        }
+      }
+
+      // Sync with API (non-blocking, for tab synchronization)
       try {
         await fetch('/api/colors/preferences', {
           method: 'PUT',
@@ -289,7 +335,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
         });
       } catch (apiError) {
         console.warn('Failed to sync color preference with API:', apiError);
-        // Continue anyway - state is updated on client
+        // Continue anyway - state is updated on client and localStorage
       }
     } catch (error) {
       console.error('Failed to set active color palette:', error);
