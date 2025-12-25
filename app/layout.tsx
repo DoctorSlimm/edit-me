@@ -8,6 +8,7 @@ import Script from "next/script";
 import { ThemeProvider } from "./providers/ThemeProvider";
 import { AuthProvider } from "./providers/AuthProvider";
 import { PopupProvider } from "./providers/PopupProvider";
+import { UIComponents } from "./ui-components";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -50,6 +51,7 @@ export default function RootLayout({
           <ThemeProvider>
             <PopupProvider>
               {children}
+              <UIComponents />
             </PopupProvider>
           </ThemeProvider>
         </AuthProvider>
