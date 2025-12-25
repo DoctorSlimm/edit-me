@@ -1,0 +1,427 @@
+/* ============================================
+   1980s ARCADE RETRO STYLING SYSTEM
+   ============================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+:root {
+  /* 1980s Arcade Neon Palette */
+  --arcade-neon-magenta: #FF00FF;
+  --arcade-neon-cyan: #00FFFF;
+  --arcade-neon-yellow: #FFFF00;
+  --arcade-neon-pink: #FF006E;
+  --arcade-neon-blue: #00D9FF;
+  --arcade-dark-navy: #0A0A2E;
+  --arcade-text-white: #FFFFFF;
+  --arcade-text-black: #000000;
+
+  /* Arcade Typography */
+  --font-arcade-primary: "Press Start 2P", monospace;
+  --font-arcade-fallback: monospace;
+
+  /* Arcade Effects */
+  --arcade-scanline-opacity: 0.15;
+  --arcade-glow-blur: 10px;
+  --arcade-border-width: 3px;
+}
+
+/* ============================================
+   ARCADE SCANLINE OVERLAY ANIMATION
+   ============================================ */
+
+@keyframes arcade-scanlines {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 0 2px;
+  }
+}
+
+/* ============================================
+   TOP-LEVEL ARCADE CONTAINER
+   ============================================ */
+
+.arcade-container {
+  position: relative;
+}
+
+/* ============================================
+   ARCADE NEON BORDERS & GLOWS
+   ============================================ */
+
+.arcade-neon-border {
+  border: var(--arcade-border-width) solid currentColor;
+  box-shadow: 0 0 var(--arcade-glow-blur) currentColor;
+}
+
+/* Specific neon color variants */
+.arcade-neon-magenta {
+  color: var(--arcade-neon-magenta);
+  border-color: var(--arcade-neon-magenta);
+  box-shadow: 0 0 var(--arcade-glow-blur) var(--arcade-neon-magenta),
+             inset 0 0 10px rgba(255, 0, 255, 0.2);
+}
+
+.arcade-neon-cyan {
+  color: var(--arcade-neon-cyan);
+  border-color: var(--arcade-neon-cyan);
+  box-shadow: 0 0 var(--arcade-glow-blur) var(--arcade-neon-cyan),
+             inset 0 0 10px rgba(0, 255, 255, 0.2);
+}
+
+.arcade-neon-yellow {
+  color: var(--arcade-neon-yellow);
+  border-color: var(--arcade-neon-yellow);
+  box-shadow: 0 0 var(--arcade-glow-blur) var(--arcade-neon-yellow),
+             inset 0 0 10px rgba(255, 255, 0, 0.2);
+}
+
+.arcade-neon-pink {
+  color: var(--arcade-neon-pink);
+  border-color: var(--arcade-neon-pink);
+  box-shadow: 0 0 var(--arcade-glow-blur) var(--arcade-neon-pink),
+             inset 0 0 10px rgba(255, 0, 110, 0.2);
+}
+
+.arcade-neon-blue {
+  color: var(--arcade-neon-blue);
+  border-color: var(--arcade-neon-blue);
+  box-shadow: 0 0 var(--arcade-glow-blur) var(--arcade-neon-blue),
+             inset 0 0 10px rgba(0, 217, 255, 0.2);
+}
+
+/* ============================================
+   ARCADE TEXT & TYPOGRAPHY
+   ============================================ */
+
+.arcade-text {
+  font-family: var(--font-arcade-primary);
+  font-size: 10px;
+  letter-spacing: 1px;
+  color: var(--arcade-text-white);
+  text-shadow: 2px 2px 0px var(--arcade-text-black),
+               4px 4px 0px currentColor;
+}
+
+.arcade-text-large {
+  font-family: var(--font-arcade-primary);
+  font-size: 14px;
+  letter-spacing: 2px;
+  color: var(--arcade-text-white);
+  text-shadow: 2px 2px 0px var(--arcade-text-black),
+               4px 4px 0px currentColor;
+}
+
+.arcade-text-medium {
+  font-family: var(--font-arcade-primary);
+  font-size: 12px;
+  letter-spacing: 1px;
+  color: var(--arcade-text-white);
+  text-shadow: 2px 2px 0px var(--arcade-text-black),
+               4px 4px 0px currentColor;
+}
+
+/* ============================================
+   ARCADE SCANLINE EFFECT
+   ============================================ */
+
+.arcade-scanlines {
+  position: relative;
+  background-image: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, var(--arcade-scanline-opacity)) 0px,
+    rgba(0, 0, 0, var(--arcade-scanline-opacity)) 1px,
+    transparent 1px,
+    transparent 2px
+  );
+  animation: arcade-scanlines 8s linear infinite;
+}
+
+/* Reduce scanline opacity on mobile for performance */
+@media (max-width: 768px) {
+  .arcade-scanlines {
+    --arcade-scanline-opacity: 0.08;
+  }
+}
+
+/* ============================================
+   ARCADE HERO SECTION
+   ============================================ */
+
+.arcade-hero-section {
+  background-color: var(--arcade-dark-navy);
+  position: relative;
+}
+
+.arcade-hero-banner {
+  background: linear-gradient(135deg, var(--arcade-neon-magenta), var(--arcade-neon-pink));
+  border: var(--arcade-border-width) solid var(--arcade-neon-magenta);
+  box-shadow: 0 0 20px var(--arcade-neon-magenta),
+             inset 0 0 20px rgba(255, 0, 255, 0.3);
+  padding: 20px;
+  position: relative;
+}
+
+.arcade-hero-banner::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.15) 0px,
+    rgba(0, 0, 0, 0.15) 1px,
+    transparent 1px,
+    transparent 2px
+  );
+  pointer-events: none;
+}
+
+.arcade-header {
+  text-align: center;
+  color: var(--arcade-neon-yellow);
+  font-family: var(--font-arcade-primary);
+  font-size: 20px;
+  text-shadow: 2px 2px 0px var(--arcade-text-black),
+               4px 4px 0px var(--arcade-neon-cyan);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 15px;
+}
+
+.arcade-header-subtitle {
+  color: var(--arcade-text-white);
+  font-family: var(--font-arcade-primary);
+  font-size: 10px;
+  text-shadow: 1px 1px 0px var(--arcade-text-black),
+               2px 2px 0px var(--arcade-neon-pink);
+  letter-spacing: 1px;
+}
+
+/* ============================================
+   ARCADE FEATURED CARDS
+   ============================================ */
+
+.arcade-featured-card {
+  background-color: var(--arcade-dark-navy);
+  border: var(--arcade-border-width) solid;
+  box-shadow: 0 0 15px currentColor,
+             inset 0 0 15px rgba(0, 0, 0, 0.5);
+  padding: 15px;
+  position: relative;
+  margin: 15px 0;
+}
+
+.arcade-featured-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.1) 0px,
+    rgba(0, 0, 0, 0.1) 1px,
+    transparent 1px,
+    transparent 2px
+  );
+  pointer-events: none;
+}
+
+.arcade-card-title {
+  color: var(--arcade-text-white);
+  font-family: var(--font-arcade-primary);
+  font-size: 14px;
+  text-shadow: 2px 2px 0px var(--arcade-text-black),
+               3px 3px 0px currentColor;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.arcade-card-content {
+  color: var(--arcade-text-white);
+  font-family: monospace;
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+/* ============================================
+   ARCADE BUTTONS
+   ============================================ */
+
+.arcade-button {
+  background: linear-gradient(135deg, var(--arcade-neon-cyan), var(--arcade-neon-blue));
+  border: 2px solid var(--arcade-neon-cyan);
+  color: var(--arcade-dark-navy);
+  font-family: var(--font-arcade-primary);
+  font-size: 10px;
+  padding: 8px 16px;
+  cursor: pointer;
+  box-shadow: 0 0 10px var(--arcade-neon-cyan),
+             inset 0 0 10px rgba(0, 255, 255, 0.3);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: bold;
+  transition: all 100ms steps(4, end);
+}
+
+.arcade-button:hover {
+  box-shadow: 0 0 20px var(--arcade-neon-cyan),
+             inset 0 0 15px rgba(0, 255, 255, 0.5);
+  transform: scale(1.05);
+}
+
+.arcade-button:active {
+  transform: scale(0.95);
+  box-shadow: 0 0 5px var(--arcade-neon-cyan);
+}
+
+/* ============================================
+   ARCADE MARQUEE
+   ============================================ */
+
+.arcade-marquee {
+  background-color: var(--arcade-dark-navy);
+  border: var(--arcade-border-width) solid var(--arcade-neon-yellow);
+  box-shadow: 0 0 15px var(--arcade-neon-yellow);
+  overflow: hidden;
+  padding: 10px 0;
+  position: relative;
+}
+
+.arcade-marquee::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.1) 0px,
+    rgba(0, 0, 0, 0.1) 1px,
+    transparent 1px,
+    transparent 2px
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+.arcade-marquee-content {
+  display: inline-block;
+  white-space: nowrap;
+  animation: arcade-marquee-scroll 15s linear infinite steps(60, end);
+  color: var(--arcade-neon-yellow);
+  font-family: var(--font-arcade-primary);
+  font-size: 12px;
+  text-shadow: 1px 1px 0px var(--arcade-text-black),
+               2px 2px 0px currentColor;
+  padding: 0 10px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  position: relative;
+  z-index: 0;
+}
+
+@keyframes arcade-marquee-scroll {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+/* ============================================
+   ARCADE PULSE ANIMATION
+   ============================================ */
+
+@keyframes arcade-pulse {
+  0%, 100% {
+    opacity: 1;
+    box-shadow: 0 0 10px currentColor;
+  }
+  50% {
+    opacity: 0.7;
+    box-shadow: 0 0 20px currentColor;
+  }
+}
+
+.arcade-pulse {
+  animation: arcade-pulse 1s ease-in-out infinite steps(4, end);
+}
+
+/* ============================================
+   ARCADE LED DISPLAY
+   ============================================ */
+
+.arcade-led-display {
+  background-color: var(--arcade-text-black);
+  border: 2px solid var(--arcade-neon-yellow);
+  color: var(--arcade-neon-yellow);
+  padding: 10px 15px;
+  font-family: monospace;
+  font-size: 16px;
+  font-weight: bold;
+  box-shadow: inset 0 0 10px rgba(255, 255, 0, 0.2),
+             0 0 10px var(--arcade-neon-yellow);
+  text-align: center;
+  letter-spacing: 2px;
+}
+
+/* ============================================
+   ARCADE RESPONSIVE ADJUSTMENTS
+   ============================================ */
+
+@media (max-width: 768px) {
+  .arcade-text {
+    font-size: 8px;
+  }
+
+  .arcade-text-large {
+    font-size: 12px;
+  }
+
+  .arcade-text-medium {
+    font-size: 10px;
+  }
+
+  .arcade-header {
+    font-size: 16px;
+  }
+
+  .arcade-card-title {
+    font-size: 12px;
+  }
+
+  .arcade-button {
+    font-size: 9px;
+    padding: 6px 12px;
+  }
+
+  .arcade-marquee-content {
+    font-size: 10px;
+  }
+}
+
+/* ============================================
+   ACCESSIBILITY - REDUCED MOTION
+   ============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .arcade-scanlines,
+  .arcade-marquee-content,
+  .arcade-pulse {
+    animation: none;
+  }
+
+  .arcade-button {
+    transition: none;
+  }
+}

@@ -31,6 +31,13 @@
   --modal-overlay-z: 1000;
   --modal-dialog-z: 1001;
   --modal-focus-z: 1002;
+
+  /* 1980s Arcade CSS Variables for Theme Support */
+  --arcade-neon-primary: #FF00FF;
+  --arcade-neon-secondary: #00FFFF;
+  --arcade-neon-tertiary: #FFFF00;
+  --arcade-scanline-opacity: 0.15;
+  --arcade-glow-blur: 10px;
 }
 
 /* ============================================
